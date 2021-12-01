@@ -8,10 +8,11 @@ from q2_pepsirf.format_types import PepsirfInfoSNPNFormat
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
 # Method Input/Parameters: default ctx, raw_data, bins, negative_controls, negative_ids,
-# negative_names, thresh_file, exact_z_thresh, raw_constraint, pepsirf_binary
+# negative_names, thresh_file, exact_z_thresh, exact_zenrich_thresh, step_z_thresh,
+# upper_z_thresh, lower_z_thresh, raw_constraint, pepsirf_binary
 # Method output/Returned: col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
 # read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter, colsum_scatter
-# Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters), 
+# Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich), 
 # (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
 def diffEnrich(
     ctx,
@@ -22,6 +23,10 @@ def diffEnrich(
     negative_names=None,
     thresh_file = None,
     exact_z_thresh = None,
+    exact_zenrich_thresh = None,
+    step_z_thresh = 5,
+    upper_z_thresh = 30,
+    lower_z_thresh = 5,
     raw_constraint = 300000,
     pepsirf_binary = "pepsirf"
 ):
@@ -35,6 +40,7 @@ def diffEnrich(
     RCBoxplot = ctx.get_action('ps-plot', 'readCountsBoxplot')
     enrichBoxplot = ctx.get_action('ps-plot', 'enrichmentRCBoxplot')
     repScatter = ctx.get_action('ps-plot', 'repScatters')
+    zenrich = ctx.get_action('ps-plot', 'zenrich')
 
     # run norm module to recieved col-sum
     col_sum, = norm(peptide_scores = raw_data,
@@ -94,6 +100,10 @@ def diffEnrich(
     sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
     source = "pairs_source.tsv"
 
+    # create list for collection of sample names
+    if not negative_names:
+        negative_names = []
+
     # open samples file and collect samples into a dictionary
     with open( str(sampleNM) ) as SN:
         for line in SN:
@@ -101,6 +111,8 @@ def diffEnrich(
             sourceLS = sample.rsplit('_', 1)
             sourced = sourceLS[0]
             sourceDic[sourced].append(sample)
+            if not negative_names:
+                negative_names.append(sample)
 
     # create a source file written with column 1 as the sample names
     # and the column 2 as the source column
@@ -145,9 +157,24 @@ def diffEnrich(
         col_sum = col_sum
     )
 
+    zenrich_out, = zenrich(
+        data = col_sum,
+        zscores = zscore_out,
+        negative_controls = negative_names,
+        source = source_col,
+        negative_data = negative_control,
+        step_z_thresh = step_z_thresh,
+        upper_z_thresh = upper_z_thresh,
+        lower_z_thresh = lower_z_thresh,
+        exact_z_thresh = exact_zenrich_thresh,
+        pepsirf_binary = pepsirf_binary
+    )
+
+    print("HELLO WORLD")
+
     # return all files created
     return (
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
-        zscore_scatter, colsum_scatter
+        zscore_scatter, colsum_scatter, zenrich_out
         )

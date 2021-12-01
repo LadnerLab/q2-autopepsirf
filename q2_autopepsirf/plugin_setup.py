@@ -33,14 +33,19 @@ plugin.pipelines.register_function(
         ("enrich_out", PairwiseEnrichment),
         ("enrich_count_boxplot", Visualization),
         ("zscore_scatter", Visualization),
-        ("colsum_scatter", Visualization)
+        ("colsum_scatter", Visualization),
+        ("zenrich_out", Visualization)
     ],
     parameters={
         'negative_id': Str,
         'negative_names': List[Str],
         'pepsirf_binary': Str,
         'exact_z_thresh': Str,
-        'raw_constraint': Int % Range(0, None)
+        'raw_constraint': Int % Range(0, None),
+        'exact_zenrich_thresh': List[Str],
+        'step_z_thresh': Int % Range(1, None),
+        'upper_z_thresh': Int % Range(2, None),
+        'lower_z_thresh': Int % Range(1, None)
     },
     input_descriptions={
         'raw_data': "Raw data matrix.",
@@ -57,10 +62,17 @@ plugin.pipelines.register_function(
         'negative_names': "Optional approach for identifying negative controls. "
                         "Space-separated list of negative control sample names.",
         'pepsirf_binary': "The binary to call pepsirf on your system.",
-        'exact_z_thresh': "Exact z score thresholds either individual or combined.",
+        'exact_z_thresh': "Individual Exact z score threshold separated by a comma for creation of threshold file"
+                        " to run pepsirf's enrich module (Ex: 6,10 or 5,30)",
         'raw_constraint': "The minimum total raw count across all peptides for a sample to be "
                         "included in the analysis.This provides a way to impose a minimum read "
                         "count for a sample to be evaluated.",
+        'exact_zenrich_thresh': "List of exact z score thresholds either individual or combined. "
+                            "List MUST BE in descending order. (Example argument: '--p-exact-zenrich-thresh 25 10 3' "
+                            "or '--p-exact-zenrich-thresh 6,25 4,10 1,3')",
+        "step_z_thresh": "Integar to increment z-score thresholds.",
+        "upper_z_thresh": "Upper limit of z-score thresholds (non-inclusive).",
+        "lower_z_thresh": "Lower limit of z-score thresholds (inclusive).",
     },
     name='diffEnrich Pepsirf Pipeline',
     description="Uses the diff normaization from "
