@@ -45,7 +45,9 @@ plugin.pipelines.register_function(
         'exact_zenrich_thresh': List[Str],
         'step_z_thresh': Int % Range(1, None),
         'upper_z_thresh': Int % Range(2, None),
-        'lower_z_thresh': Int % Range(1, None)
+        'lower_z_thresh': Int % Range(1, None),
+        'pepsirf_tsv_dir': Str,
+        'tsv_base_str': Str
     },
     input_descriptions={
         'raw_data': "Raw data matrix.",
