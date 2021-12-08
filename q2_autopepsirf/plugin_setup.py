@@ -25,16 +25,16 @@ plugin.pipelines.register_function(
         ("col_sum", FeatureTable[Normed]),
         ("diff", FeatureTable[NormedDifference]),
         ("diff_ratio", FeatureTable[NormedDiffRatio]),
-        ("zscore_out", FeatureTable[Zscore]),
-        ("nan_out", ZscoreNan),
+        ("zscore", FeatureTable[Zscore]),
+        ("zscore_nan", ZscoreNan),
         ("sample_names", InfoSNPN),
         ("read_counts", InfoSumOfProbes),
         ("rc_boxplot", Visualization),
-        ("enrich_out", PairwiseEnrichment),
+        ("enrich", PairwiseEnrichment),
         ("enrich_count_boxplot", Visualization),
         ("zscore_scatter", Visualization),
         ("colsum_scatter", Visualization),
-        ("zenrich_out", Visualization)
+        ("zenrich_scatter", Visualization)
     ],
     parameters={
         'negative_id': Str,
@@ -75,6 +75,9 @@ plugin.pipelines.register_function(
         "step_z_thresh": "Integar to increment z-score thresholds.",
         "upper_z_thresh": "Upper limit of z-score thresholds (non-inclusive).",
         "lower_z_thresh": "Lower limit of z-score thresholds (inclusive).",
+        "pepsirf_tsv_dir": "Provide a directory path. Must also provide tsv-base-str",
+        "tsv_base_str": "The base name for the output tsv files excluding ay extensions, typcally the raw data filename "
+                        "(EX: --p-tsv-base-str raw_data). Must also provide pepsirf-tsv-dir"
     },
     name='diffEnrich Pepsirf Pipeline',
     description="Uses the diff normaization from "
