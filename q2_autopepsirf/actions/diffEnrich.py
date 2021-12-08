@@ -3,7 +3,7 @@ import qiime2
 from collections import defaultdict
 import csv, os
 
-from q2_pepsirf.format_types import PepsirfInfoSNPNFormat
+from q2_pepsirf.format_types import PepsirfInfoSNPNFormat, PepsirfContingencyTSVFormat
 
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
@@ -24,12 +24,17 @@ def diffEnrich(
     thresh_file = None,
     exact_z_thresh = None,
     exact_zenrich_thresh = None,
+    pepsirf_tsv_dir = None,
+    tsv_base_str = None,
     step_z_thresh = 5,
     upper_z_thresh = 30,
     lower_z_thresh = 5,
     raw_constraint = 300000,
     pepsirf_binary = "pepsirf"
 ):
+
+    if pepsirf_tsv_dir and tsv_base_str:
+        base = ".".join(tsv_base_str.split(".")[:-1])
 
     # collect the actions from ps-plot and q2-pepsirf to be executed
     norm = ctx.get_action('pepsirf', 'norm')
@@ -51,6 +56,12 @@ def diffEnrich(
                     precision = 2,
                     pepsirf_binary = pepsirf_binary)
 
+    if pepsirf_tsv_dir:
+        cs_base = "%s_CS.tsv" % (base)
+        cs_tsv = col_sum.view(PepsirfContingencyTSVFormat)
+        cs_tsv.save(os.path.join(pepsirf_tsv_dir, cs_base), ext = ".tsv") #requires qiime2-2021.11
+
+
     # run norm module to recieve diff
     diff, = norm(peptide_scores = col_sum,
                     normalize_approach = "diff",
@@ -59,6 +70,11 @@ def diffEnrich(
                     negative_names = negative_names,
                     precision = 2,
                     pepsirf_binary = pepsirf_binary)
+
+    if pepsirf_tsv_dir:
+        diff_base = "%s_SBD.tsv" % (base)
+        diff_tsv = diff.view(PepsirfContingencyTSVFormat)
+        diff_tsv.save(os.path.join(pepsirf_tsv_dir, diff_base), ext = ".tsv")
 
     # run norm module to recieve diff-ratio
     diff_ratio, = norm(peptide_scores = col_sum,
@@ -157,6 +173,7 @@ def diffEnrich(
         col_sum = col_sum
     )
 
+    # run the zenrich module to collect visualization
     zenrich_out, = zenrich(
         data = col_sum,
         zscores = zscore_out,
@@ -169,8 +186,6 @@ def diffEnrich(
         exact_z_thresh = exact_zenrich_thresh,
         pepsirf_binary = pepsirf_binary
     )
-
-    print("HELLO WORLD")
 
     # return all files created
     return (
