@@ -3,7 +3,7 @@ import qiime2
 from collections import defaultdict
 import csv, os
 
-from q2_pepsirf.format_types import PepsirfInfoSNPNFormat, PepsirfContingencyTSVFormat
+from q2_pepsirf.format_types import PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat, PepsirfContingencyTSVFormat, ZscoreNanFormat
 
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
@@ -32,9 +32,8 @@ def diffEnrich(
     raw_constraint = 300000,
     pepsirf_binary = "pepsirf"
 ):
-
     if pepsirf_tsv_dir and tsv_base_str:
-        base = ".".join(tsv_base_str.split(".")[:-1])
+        os.mkdir(pepsirf_tsv_dir)
 
     # collect the actions from ps-plot and q2-pepsirf to be executed
     norm = ctx.get_action('pepsirf', 'norm')
@@ -56,8 +55,8 @@ def diffEnrich(
                     precision = 2,
                     pepsirf_binary = pepsirf_binary)
 
-    if pepsirf_tsv_dir:
-        cs_base = "%s_CS.tsv" % (base)
+    if pepsirf_tsv_dir and tsv_base_str:
+        cs_base = "%s_CS.tsv" % (tsv_base_str)
         cs_tsv = col_sum.view(PepsirfContingencyTSVFormat)
         cs_tsv.save(os.path.join(pepsirf_tsv_dir, cs_base), ext = ".tsv") #requires qiime2-2021.11
 
@@ -71,8 +70,8 @@ def diffEnrich(
                     precision = 2,
                     pepsirf_binary = pepsirf_binary)
 
-    if pepsirf_tsv_dir:
-        diff_base = "%s_SBD.tsv" % (base)
+    if pepsirf_tsv_dir and tsv_base_str:
+        diff_base = "%s_SBD.tsv" % (tsv_base_str)
         diff_tsv = diff.view(PepsirfContingencyTSVFormat)
         diff_tsv.save(os.path.join(pepsirf_tsv_dir, diff_base), ext = ".tsv")
 
@@ -85,6 +84,11 @@ def diffEnrich(
                     precision = 2,
                     pepsirf_binary = pepsirf_binary)
 
+    if pepsirf_tsv_dir and tsv_base_str:
+        diffR_base = "%s_SBDR.tsv" % (tsv_base_str)
+        diffR_tsv = diff_ratio.view(PepsirfContingencyTSVFormat)
+        diffR_tsv.save(os.path.join(pepsirf_tsv_dir, diffR_base), ext = ".tsv")
+
     # run zscore module to recieve zscore and nan files
     zscore_out, nan_out = zscore(
         scores = diff,
@@ -93,6 +97,16 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    if pepsirf_tsv_dir and tsv_base_str:
+        zscore_base = "%s_Z-HDI95.tsv" % (tsv_base_str)
+        zscore_tsv = zscore_out.view(PepsirfContingencyTSVFormat)
+        zscore_tsv.save(os.path.join(pepsirf_tsv_dir, zscore_base), ext = ".tsv")
+
+        nan_base = "%s_Z-HDI95.nan" % (tsv_base_str)
+        nan_tsv = nan_out.view(ZscoreNanFormat)
+        nan_tsv.save(os.path.join(pepsirf_tsv_dir, nan_base), ext = ".nan")
+
+
     # run info module to collect sample names
     sample_names, = infoSNPN(
         input = raw_data,
@@ -100,11 +114,21 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    if pepsirf_tsv_dir and tsv_base_str:
+        sn_base = "%s_SN.tsv" % (tsv_base_str)
+        sn_tsv = sample_names.view(PepsirfInfoSNPNFormat)
+        sn_tsv.save(os.path.join(pepsirf_tsv_dir, sn_base), ext = ".tsv")
+
     # run info to collect read counts
     read_counts, = infoSOP(
         input = raw_data,
         pepsirf_binary = pepsirf_binary
     )
+
+    if pepsirf_tsv_dir and tsv_base_str:
+        rc_base = "%s_RC.tsv" % (tsv_base_str)
+        rc_tsv = read_counts.view(PepsirfInfoSumOfProbesFmt)
+        rc_tsv.save(os.path.join(pepsirf_tsv_dir, rc_base), ext = ".tsv")
 
     # run readCounts boxplot module to recieve visualization
     rc_boxplot_out, = RCBoxplot(
@@ -114,7 +138,7 @@ def diffEnrich(
     # create variables for source file creation
     sourceDic = defaultdict(list)
     sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
-    source = "pairs_source.tsv"
+    source = "samples_source.tsv"
 
     # create list for collection of sample names
     if not negative_names:
