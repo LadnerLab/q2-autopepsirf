@@ -3,7 +3,7 @@ import qiime2
 from collections import defaultdict
 import csv, os
 
-from q2_pepsirf.format_types import PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat, PepsirfContingencyTSVFormat, ZscoreNanFormat
+from q2_pepsirf.format_types import PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat, PepsirfContingencyTSVFormat, ZscoreNanFormat, EnrichedPeptideDirFmt
 
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
@@ -178,6 +178,11 @@ def diffEnrich(
         enrichment_failure = True,
         pepsirf_binary = pepsirf_binary
     )
+
+    if pepsirf_tsv_dir and tsv_base_str:
+        enrich_base = "enriched"
+        enrich_tsv = enrich_dir.view(EnrichedPeptideDirFmt)
+        enrich_tsv.save(os.path.join(pepsirf_tsv_dir, enrich_base))
 
     # run enrichment boxplot module to recieve visualization
     enrichedCountsBoxplot, = enrichBoxplot(
