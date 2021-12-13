@@ -1,10 +1,12 @@
+#!/usr/bin/env python
 from setuptools import setup, find_packages
+import versioneer
 
 
 setup(
     name="q2-autopepsirf",
-    version='0.0.1.dev',
-    packages=find_packages(),
+    version=versioneer.get_version(),
+    cmdclass = versioneer.get_cmdclass(),
     package_data={},
     author="Annabelle Brown",
     author_email="annabelle811@live.com",
