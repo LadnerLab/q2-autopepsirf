@@ -3,6 +3,7 @@ import importlib
 from qiime2.plugin import (Plugin, TypeMap, Str, List,
                             MetadataColumn, Categorical,
                             Int, Range, Visualization)
+import q2_autopepsirf
 
 from q2_types.feature_table import FeatureTable
 from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
@@ -10,7 +11,7 @@ from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
                 EnrichThresh, PairwiseEnrichment, InfoSumOfProbes)
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
 
-plugin = Plugin("autopepsirf", version="0.0.1.dev",
+plugin = Plugin("autopepsirf", version=q2_autopepsirf.__version__,
                 website="https://github.com/LadnerLab/q2-autopepsirf")
 
 plugin.pipelines.register_function(
