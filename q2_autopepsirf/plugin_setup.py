@@ -12,7 +12,8 @@ from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
 
 plugin = Plugin("autopepsirf", version=q2_autopepsirf.__version__,
-                website="https://github.com/LadnerLab/q2-autopepsirf")
+                website="https://github.com/LadnerLab/q2-autopepsirf",
+                description="Qiime2 plugin used for the automation of q2-pepsirf and q2-ps-plot.")
 
 plugin.pipelines.register_function(
     function=diffEnrich,
