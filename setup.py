@@ -7,6 +7,7 @@ setup(
     name="q2-autopepsirf",
     version=versioneer.get_version(),
     cmdclass = versioneer.get_cmdclass(),
+    packages = find_packages(),
     package_data={},
     author="Annabelle Brown",
     author_email="annabelle811@live.com",
