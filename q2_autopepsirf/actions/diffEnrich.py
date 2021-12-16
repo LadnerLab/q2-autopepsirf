@@ -24,7 +24,7 @@ def diffEnrich(
     thresh_file = None,
     exact_z_thresh = None,
     exact_zenrich_thresh = None,
-    pepsirf_tsv_dir = None,
+    pepsirf_tsv_dir = "./",
     tsv_base_str = None,
     step_z_thresh = 5,
     upper_z_thresh = 30,
@@ -32,7 +32,7 @@ def diffEnrich(
     raw_constraint = 300000,
     pepsirf_binary = "pepsirf"
 ):
-    if pepsirf_tsv_dir and tsv_base_str:
+    if pepsirf_tsv_dir:
         if not os.path.isdir(pepsirf_tsv_dir):
             os.mkdir(pepsirf_tsv_dir)
 
@@ -133,7 +133,8 @@ def diffEnrich(
 
     # run readCounts boxplot module to recieve visualization
     rc_boxplot_out, = RCBoxplot(
-        read_counts = read_counts
+        read_counts = read_counts,
+        png_out_dir = pepsirf_tsv_dir
     )
 
     # create variables for source file creation
@@ -157,7 +158,8 @@ def diffEnrich(
 
     # create a source file written with column 1 as the sample names
     # and the column 2 as the source column
-    with open( source , "w" ) as tsvWriter:
+    # the source file will be put in the tsv directory
+    with open( os.path.join(pepsirf_tsv_dir, source) , "w" ) as tsvWriter:
         writer = csv.writer(tsvWriter, delimiter='\t')
         writer.writerow(['sampleID', 'source'])
         for srce, samples in sourceDic.items():
@@ -186,7 +188,8 @@ def diffEnrich(
 
     # run enrichment boxplot module to recieve visualization
     enrichedCountsBoxplot, = enrichBoxplot(
-        enriched_dir = enrich_dir
+        enriched_dir = enrich_dir,
+        png_out_dir = pepsirf_tsv_dir
     )
 
     # run repScatter module to collect visualization
