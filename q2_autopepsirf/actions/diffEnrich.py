@@ -140,7 +140,7 @@ def diffEnrich(
     # create variables for source file creation
     sourceDic = defaultdict(list)
     sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
-    source = "samples_source.tsv"
+    source = os.path.join(pepsirf_tsv_dir, "samples_source.tsv")
 
     # create list for collection of sample names
     if not negative_names:
@@ -159,7 +159,7 @@ def diffEnrich(
     # create a source file written with column 1 as the sample names
     # and the column 2 as the source column
     # the source file will be put in the tsv directory
-    with open( os.path.join(pepsirf_tsv_dir, source) , "w" ) as tsvWriter:
+    with open( source , "w" ) as tsvWriter:
         writer = csv.writer(tsvWriter, delimiter='\t')
         writer.writerow(['sampleID', 'source'])
         for srce, samples in sourceDic.items():
@@ -180,6 +180,8 @@ def diffEnrich(
         enrichment_failure = True,
         pepsirf_binary = pepsirf_binary
     )
+
+    print("enrich working")
 
     if pepsirf_tsv_dir and tsv_base_str:
         enrich_base = "enriched"
