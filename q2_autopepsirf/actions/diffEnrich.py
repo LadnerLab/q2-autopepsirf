@@ -181,13 +181,23 @@ def diffEnrich(
         raw_scores = raw_data,
         raw_constraint = raw_constraint,
         enrichment_failure = True,
+        truncate = True,
         pepsirf_binary = pepsirf_binary
     )
 
     print("enrich working")
 
     if pepsirf_tsv_dir and tsv_base_str:
-        enrich_base = "enriched"
+        if exact_z_thresh:
+            enrich_zt = exact_z_thresh.split(",")
+            if len(enrich_zt) > 1:
+                enrich_base = "%s-%sZ-HDI95_%sCS_%sraw" % (
+                    enrich_zt[0], enrich_zt[1], str(exact_cs_thresh), str(raw_constraint))
+            else:
+                enrich_base = "%s-%sZ-HDI95_%sCS_%sraw" % (
+                    enrich[0], enrich[1], str(exact_cs_thresh), str(raw_constraint))
+        else:
+            enrich_base = "enriched"
         enrich_tsv = enrich_dir.view(EnrichedPeptideDirFmt)
         enrich_tsv.save(os.path.join(pepsirf_tsv_dir, enrich_base))
 
