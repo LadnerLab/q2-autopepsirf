@@ -164,8 +164,9 @@ def diffEnrich(
         writer = csv.writer(tsvWriter, delimiter='\t')
         writer.writerow(['sampleID', 'source'])
         for srce, samples in sourceDic.items():
-            for name in samples:
-                writer.writerow([name, srce])
+            if len(samples) > 1:
+                for name in samples:
+                    writer.writerow([name, srce])
 
     # convert source file to metadata column to be used within the modules
     source_col = qiime2.Metadata.load(source).get_column("source")
@@ -181,7 +182,6 @@ def diffEnrich(
         raw_scores = raw_data,
         raw_constraint = raw_constraint,
         enrichment_failure = True,
-        truncate = True,
         pepsirf_binary = pepsirf_binary
     )
 
