@@ -23,7 +23,7 @@ def diffEnrich(
     negative_names=None,
     thresh_file = None,
     exact_z_thresh = None,
-    exact_cs_thresh = None,
+    exact_cs_thresh = "20",
     exact_zenrich_thresh = None,
     pepsirf_tsv_dir = "./",
     tsv_base_str = None,
@@ -144,7 +144,7 @@ def diffEnrich(
     source = os.path.join(pepsirf_tsv_dir, "samples_source.tsv")
 
     # create list for collection of sample names
-    if not negative_names:
+    if not negative_names and not negative_id:
         negative_names = []
 
     # open samples file and collect samples into a dictionary
@@ -154,7 +154,7 @@ def diffEnrich(
             sourceLS = sample.rsplit('_', 1)
             sourced = sourceLS[0]
             sourceDic[sourced].append(sample)
-            if not negative_names:
+            if not negative_names and not negative_id:
                 negative_names.append(sample)
 
     # create a source file written with column 1 as the sample names
@@ -185,17 +185,24 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
-    print("enrich working")
-
     if pepsirf_tsv_dir and tsv_base_str:
         if exact_z_thresh:
             enrich_zt = exact_z_thresh.split(",")
+            enrich_cst = exact_cs_thresh.split(",")
             if len(enrich_zt) > 1:
-                enrich_base = "%s-%sZ-HDI95_%sCS_%sraw" % (
-                    enrich_zt[0], enrich_zt[1], str(exact_cs_thresh), str(raw_constraint))
+                enrich_base = "%s-%sZ-HDI95_" % (
+                    enrich_zt[0], enrich_zt[1])
             else:
-                enrich_base = "%s-%sZ-HDI95_%sCS_%sraw" % (
-                    enrich[0], enrich[1], str(exact_cs_thresh), str(raw_constraint))
+                enrich_base = "%sZ-HDI95_" % (
+                    enrich_zt[0])
+            if len(enrich_cst) > 1:
+                enrich_base += "%s-%sCS_%sraw" % (
+                    enrich_cst[0], enrich_cst[1], str(raw_constraint)
+                )
+            else:
+                enrich_base += "%sCS_%sraw" % (
+                    enrich_cst[0], str(raw_constraint)
+                )
         else:
             enrich_base = "enriched"
         enrich_tsv = enrich_dir.view(EnrichedPeptideDirFmt)
@@ -226,12 +233,14 @@ def diffEnrich(
         data = col_sum,
         zscores = zscore_out,
         negative_controls = negative_names,
+        negative_id = negative_id,
         source = source_col,
         negative_data = negative_control,
         step_z_thresh = step_z_thresh,
         upper_z_thresh = upper_z_thresh,
         lower_z_thresh = lower_z_thresh,
         exact_z_thresh = exact_zenrich_thresh,
+        exact_cs_thresh = exact_cs_thresh,
         pepsirf_binary = pepsirf_binary
     )
 
