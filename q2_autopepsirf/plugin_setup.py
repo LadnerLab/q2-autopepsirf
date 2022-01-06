@@ -18,8 +18,8 @@ plugin = Plugin("autopepsirf", version=q2_autopepsirf.__version__,
 plugin.pipelines.register_function(
     function=diffEnrich,
     inputs={
-        'raw_data': FeatureTable[RawCounts | Normed],
-        'negative_control': FeatureTable[RawCounts | Normed],
+        'raw_data': FeatureTable[RawCounts],
+        'negative_control': FeatureTable[Normed],
         'bins': PeptideBins,
         'thresh_file': EnrichThresh
     },
@@ -68,9 +68,9 @@ plugin.pipelines.register_function(
                         "Space-separated list of negative control sample names.",
         'pepsirf_binary': "The binary to call pepsirf on your system.",
         'exact_z_thresh': "Individual Exact z score threshold separated by a comma for creation of threshold file"
-                        " to run pepsirf's enrich module (Ex: 6,10 or 5,30)",
+                        " to run pepsirf's enrich module (Ex: 6,10 or 30)",
         'exact_cs_thresh': "Individual Exact col-sum threshold separated by a comma for creation of threshold file"
-                        " to run pepsirf's enrich module (Ex: 6,10 or 5,30)",
+                        " to run pepsirf's enrich module (Ex: 6,10 or 30)",
         'raw_constraint': "The minimum total raw count across all peptides for a sample to be "
                         "included in the analysis.This provides a way to impose a minimum read "
                         "count for a sample to be evaluated.",
