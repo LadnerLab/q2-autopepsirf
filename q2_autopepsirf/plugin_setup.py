@@ -2,7 +2,7 @@ import importlib
 
 from qiime2.plugin import (Plugin, TypeMap, Str, List,
                             MetadataColumn, Categorical,
-                            Int, Range, Visualization)
+                            Int, Range, Visualization, Float)
 import q2_autopepsirf
 
 from q2_types.feature_table import FeatureTable
@@ -50,7 +50,8 @@ plugin.pipelines.register_function(
         'upper_z_thresh': Int % Range(2, None),
         'lower_z_thresh': Int % Range(1, None),
         'pepsirf_tsv_dir': Str,
-        'tsv_base_str': Str
+        'tsv_base_str': Str,
+        'hdi': Float % Range(0.0, 1.0)
     },
     input_descriptions={
         'raw_data': "Raw data matrix.",

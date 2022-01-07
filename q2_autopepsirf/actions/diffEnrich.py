@@ -31,6 +31,7 @@ def diffEnrich(
     upper_z_thresh = 30,
     lower_z_thresh = 5,
     raw_constraint = 300000,
+    hdi = 0.95,
     pepsirf_binary = "pepsirf"
 ):
     if pepsirf_tsv_dir:
@@ -95,16 +96,16 @@ def diffEnrich(
     zscore_out, nan_out = zscore(
         scores = diff,
         bins = bins,
-        hdi = 0.95,
+        hdi = hdi,
         pepsirf_binary = pepsirf_binary
     )
 
     if pepsirf_tsv_dir and tsv_base_str:
-        zscore_base = "%s_Z-HDI95.tsv" % (tsv_base_str)
+        zscore_base = "%s_Z-HDI%s.tsv" % (tsv_base_str, str(int(hdi*100)))
         zscore_tsv = zscore_out.view(PepsirfContingencyTSVFormat)
         zscore_tsv.save(os.path.join(pepsirf_tsv_dir, zscore_base), ext = ".tsv")
 
-        nan_base = "%s_Z-HDI95.nan" % (tsv_base_str)
+        nan_base = "%s_Z-HDI%s.nan" % (tsv_base_str, str(int(hdi*100)))
         nan_tsv = nan_out.view(ZscoreNanFormat)
         nan_tsv.save(os.path.join(pepsirf_tsv_dir, nan_base), ext = ".nan")
 
@@ -190,11 +191,11 @@ def diffEnrich(
             enrich_zt = exact_z_thresh.split(",")
             enrich_cst = exact_cs_thresh.split(",")
             if len(enrich_zt) > 1:
-                enrich_base = "%s-%sZ-HDI95_" % (
-                    enrich_zt[0], enrich_zt[1])
+                enrich_base = "%s-%sZ-HDI%s_" % (
+                    enrich_zt[0], enrich_zt[1], str(int(hdi*100)))
             else:
-                enrich_base = "%sZ-HDI95_" % (
-                    enrich_zt[0])
+                enrich_base = "%sZ-HDI%s_" % (
+                    enrich_zt[0], str(int(hdi*100)))
             if len(enrich_cst) > 1:
                 enrich_base += "%s-%sCS_%sraw" % (
                     enrich_cst[0], enrich_cst[1], str(raw_constraint)
