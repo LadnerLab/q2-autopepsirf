@@ -56,6 +56,7 @@ def diffEnrich(
                     negative_id = None,
                     negative_names = None,
                     precision = 2,
+                    outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
     if pepsirf_tsv_dir and tsv_base_str:
@@ -71,6 +72,7 @@ def diffEnrich(
                     negative_id = negative_id,
                     negative_names = negative_names,
                     precision = 2,
+                    outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
     if pepsirf_tsv_dir and tsv_base_str:
@@ -85,6 +87,7 @@ def diffEnrich(
                     negative_id = negative_id,
                     negative_names = negative_names,
                     precision = 2,
+                    outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
     if pepsirf_tsv_dir and tsv_base_str:
@@ -97,6 +100,7 @@ def diffEnrich(
         scores = diff,
         bins = bins,
         hdi = hdi,
+        outfile = os.path.join(pepsirf_tsv_dir, "zscore.out"),
         pepsirf_binary = pepsirf_binary
     )
 
