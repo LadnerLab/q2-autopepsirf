@@ -118,6 +118,7 @@ def diffEnrich(
     sample_names, = infoSNPN(
         input = raw_data,
         get = "samples",
+        outfile = os.path.join(pepsirf_tsv_dir, "info.out"),
         pepsirf_binary = pepsirf_binary
     )
 
@@ -129,6 +130,7 @@ def diffEnrich(
     # run info to collect read counts
     read_counts, = infoSOP(
         input = raw_data,
+        outfile = os.path.join(pepsirf_tsv_dir, "info.out"),
         pepsirf_binary = pepsirf_binary
     )
 
