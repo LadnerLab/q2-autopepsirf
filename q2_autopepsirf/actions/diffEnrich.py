@@ -189,6 +189,7 @@ def diffEnrich(
         raw_scores = raw_data,
         raw_constraint = raw_constraint,
         enrichment_failure = True,
+        outfile = os.path.join(pepsirf_tsv_dir, "enrich.out"),
         pepsirf_binary = pepsirf_binary
     )
 
