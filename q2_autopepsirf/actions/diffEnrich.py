@@ -64,6 +64,14 @@ def diffEnrich(
         cs_tsv = col_sum.view(PepsirfContingencyTSVFormat)
         cs_tsv.save(os.path.join(pepsirf_tsv_dir, cs_base), ext = ".tsv") #requires qiime2-2021.11
 
+    # create list for collection of sample names
+    if not negative_names and not negative_id:
+        if not negative_control:
+            negative_names = []
+        else:
+            negDF = negative_control.view(pd.DataFrame)
+            negative_names = list(negDF.index)
+
 
     # run norm module to recieve diff
     diff, = norm(peptide_scores = col_sum,
@@ -150,9 +158,6 @@ def diffEnrich(
     sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
     source = os.path.join(pepsirf_tsv_dir, "samples_source.tsv")
 
-    # create list for collection of sample names
-    if not negative_names and not negative_id:
-        negative_names = []
 
     # open samples file and collect samples into a dictionary
     with open( str(sampleNM) ) as SN:
@@ -161,7 +166,7 @@ def diffEnrich(
             sourceLS = sample.rsplit('_', 1)
             sourced = sourceLS[0]
             sourceDic[sourced].append(sample)
-            if not negative_names and not negative_id:
+            if not negative_names and not negative_id and not negative_control:
                 negative_names.append(sample)
 
     # create a source file written with column 1 as the sample names
