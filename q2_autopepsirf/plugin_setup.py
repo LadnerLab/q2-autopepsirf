@@ -2,7 +2,7 @@ import importlib
 
 from qiime2.plugin import (Plugin, TypeMap, Str, List,
                             MetadataColumn, Categorical,
-                            Int, Range, Visualization)
+                            Int, Range, Visualization, Float)
 import q2_autopepsirf
 
 from q2_types.feature_table import FeatureTable
@@ -50,7 +50,8 @@ plugin.pipelines.register_function(
         'upper_z_thresh': Int % Range(2, None),
         'lower_z_thresh': Int % Range(1, None),
         'pepsirf_tsv_dir': Str,
-        'tsv_base_str': Str
+        'tsv_base_str': Str,
+        'hdi': Float % Range(0.0, 1.0)
     },
     input_descriptions={
         'raw_data': "Raw data matrix.",
@@ -83,7 +84,12 @@ plugin.pipelines.register_function(
         "pepsirf_tsv_dir": "Provide a directory path. Must also provide tsv-base-str for output of tsv verison of qza files."
                         " The source_samples file and png boxplot outputs will always be put within this directory.",
         "tsv_base_str": "The base name for the output tsv files excluding ay extensions, typcally the raw data filename "
-                        "(EX: --p-tsv-base-str raw_data). Must also provide pepsirf-tsv-dir"
+                        "(EX: --p-tsv-base-str raw_data). Must also provide pepsirf-tsv-dir",
+        "hdi": "Alternative approach for discarding outliers prior to calculating mean and stdev. If provided, this "
+            "argument will override --trim, which trims evenly from both sides of the distribution. For --hdi, the "
+            "user should provide the high density interval to be used for calculation of mean and stdev. For "
+            "example, '--hdi 0.95' would instruct the program to utilize the 95% highest density interval (from each "
+            "bin) for these calculations."
     },
     name='diffEnrich Pepsirf Pipeline',
     description="Uses the diff normaization from "
