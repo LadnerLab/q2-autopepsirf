@@ -10,20 +10,13 @@ from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
                 NormedDiffRatio, PeptideBins, Zscore, ZscoreNan, InfoSNPN,
                 EnrichThresh, PairwiseEnrichment, InfoSumOfProbes)
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
+from q2_autopepsirf.actions.diffEnrich_tsv import diffEnrich_tsv
 
 plugin = Plugin("autopepsirf", version=q2_autopepsirf.__version__,
                 website="https://github.com/LadnerLab/q2-autopepsirf",
                 description="Qiime2 plugin used for the automation of q2-pepsirf and q2-ps-plot.")
 
-plugin.pipelines.register_function(
-    function=diffEnrich,
-    inputs={
-        'raw_data': FeatureTable[RawCounts],
-        'negative_control': FeatureTable[Normed],
-        'bins': PeptideBins,
-        'thresh_file': EnrichThresh
-    },
-    outputs=[
+shared_outputs = [
         ("col_sum", FeatureTable[Normed]),
         ("diff", FeatureTable[NormedDifference]),
         ("diff_ratio", FeatureTable[NormedDiffRatio]),
@@ -37,8 +30,9 @@ plugin.pipelines.register_function(
         ("zscore_scatter", Visualization),
         ("colsum_scatter", Visualization),
         ("zenrich_scatter", Visualization)
-    ],
-    parameters={
+    ]
+
+shared_parameters = {
         'negative_id': Str,
         'negative_names': List[Str],
         'pepsirf_binary': Str,
@@ -52,17 +46,9 @@ plugin.pipelines.register_function(
         'pepsirf_tsv_dir': Str,
         'tsv_base_str': Str,
         'hdi': Float % Range(0.0, 1.0)
-    },
-    input_descriptions={
-        'raw_data': "Raw data matrix.",
-        'negative_control': "Name of FeatureTable matrix file containing data for sb samples.",
-        'bins': "Name of the file containing bins, one bin per line, as output by the bin module. Each bin contains a "
-                "tab-delimited list of peptide names.",
-        'thresh_file': "The name of a tab-delimited file containing one tab-delimited matrix filename "
-                    "and threshold(s), one per line. If providing more than z score matrix."
-    },
-    output_descriptions=None,
-    parameter_descriptions={
+    }
+
+shared_parameter_description = {
         'negative_id': "Optional approach for identifying negative controls. Provide a unique string at the start of all "
                     "negative control samples.",
         'negative_names': "Optional approach for identifying negative controls. "
@@ -90,8 +76,56 @@ plugin.pipelines.register_function(
             "user should provide the high density interval to be used for calculation of mean and stdev. For "
             "example, '--hdi 0.95' would instruct the program to utilize the 95% highest density interval (from each "
             "bin) for these calculations."
+    }
+
+plugin.pipelines.register_function(
+    function=diffEnrich,
+    inputs={
+        'raw_data': FeatureTable[RawCounts],
+        'negative_control': FeatureTable[Normed],
+        'bins': PeptideBins,
+        'thresh_file': EnrichThresh
     },
+    outputs=shared_outputs,
+    parameters=shared_parameters,
+    input_descriptions={
+        'raw_data': "Raw data matrix.",
+        'negative_control': "Name of FeatureTable matrix file containing data for sb samples.",
+        'bins': "Name of the file containing bins, one bin per line, as output by the bin module. Each bin contains a "
+                "tab-delimited list of peptide names.",
+        'thresh_file': "The name of a tab-delimited file containing one tab-delimited matrix filename "
+                    "and threshold(s), one per line. If providing more than z score matrix."
+    },
+    output_descriptions=None,
+    parameter_descriptions=shared_parameter_description,
     name='diffEnrich Pepsirf Pipeline',
+    description="Uses the diff normaization from "
+                "pepsirf to generate Z scores that are used to determine enriched peptides"
+)
+
+plugin.pipelines.register_function(
+    function=diffEnrich_tsv,
+    inputs={},
+    outputs=shared_outputs,
+    parameters={
+        'raw_data_filepath': Str,
+        'negative_control_filepath': Str,
+        'bins_filepath': Str,
+        'thresh_file_filepath': Str,
+        **shared_parameters
+    },
+    input_descriptions=None,
+    output_descriptions=None,
+    parameter_descriptions={
+        'raw_data_filepath': "Raw data matrix in .tsv format.",
+        'negative_control_filepath': "Name of .tsv matrix file containing data for sb samples.",
+        'bins_filepath': "Name of the file containing bins, one bin per line, as output by the bin module. Each bin contains a "
+                        "tab-delimited list of peptide names.",
+        'thresh_file_filepath': "The name of a tab-delimited file containing one tab-delimited matrix filename "
+                            "and threshold(s), one per line. If providing more than z score matrix.",
+        **shared_parameter_description
+    },
+    name='diffEnrich tsv Pepsirf Pipeline',
     description="Uses the diff normaization from "
                 "pepsirf to generate Z scores that are used to determine enriched peptides"
 )
