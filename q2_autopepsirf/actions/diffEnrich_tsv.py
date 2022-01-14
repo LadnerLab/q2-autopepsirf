@@ -12,12 +12,12 @@ from q2_pepsirf.format_types import (
 
 def diffEnrich_tsv(
     ctx,
-    raw_data_filepath,
-    bins_filepath,
-    negative_control_filepath=None,
+    raw_data_tsv,
+    bins_tsv,
+    negative_control_tsv=None,
     negative_id=None,
     negative_names=None,
-    thresh_file_filepath = None,
+    thresh_file_tsv = None,
     exact_z_thresh = None,
     exact_cs_thresh = "20",
     exact_zenrich_thresh = None,
@@ -35,29 +35,29 @@ def diffEnrich_tsv(
 
     raw_data = ctx.make_artifact(
         type='FeatureTable[RawCounts]',
-        view=raw_data_filepath,
+        view=raw_data_tsv,
         view_type=PepsirfContingencyTSVFormat
     )
 
     bins = ctx.make_artifact(
         type = 'PeptideBins',
-        view = bins_filepath,
+        view = bins_tsv,
         view_type=PeptideBinFormat
     )
 
-    if negative_control_filepath:
+    if negative_control_tsv:
         negative_control = ctx.make_artifact(
             type='FeatureTable[Normed]',
-            view=negative_control_filepath,
+            view=negative_control_tsv,
             view_type=PepsirfContingencyTSVFormat
         )
     else:
         negative_control = None
     
-    if thresh_file_filepath:
+    if thresh_file_tsv:
         thresh_file = ctx.make_artifact(
             type='EnrichThresh',
-            view=thresh_file_filepath,
+            view=thresh_file_tsv,
             view_type=EnrichThreshFileFormat
         )
     else:
