@@ -2,7 +2,8 @@ import importlib
 
 from qiime2.plugin import (Plugin, TypeMap, Str, List,
                             MetadataColumn, Categorical,
-                            Int, Range, Visualization, Float)
+                            Int, Range, Visualization, Float,
+                            Bool)
 import q2_autopepsirf
 
 from q2_types.feature_table import FeatureTable
@@ -45,7 +46,12 @@ shared_parameters = {
         'lower_z_thresh': Int % Range(1, None),
         'pepsirf_tsv_dir': Str,
         'tsv_base_str': Str,
-        'hdi': Float % Range(0.0, 1.0)
+        'hdi': Float % Range(0.0, 1.0),
+        'infer_pairs_source': Bool,
+        'flexible_reps_source': Bool,
+        's_enrich_source': Bool,
+        'user_defined_source': MetadataColumn[Categorical]
+
     }
 
 shared_parameter_description = {
@@ -75,7 +81,17 @@ shared_parameter_description = {
             "argument will override --trim, which trims evenly from both sides of the distribution. For --hdi, the "
             "user should provide the high density interval to be used for calculation of mean and stdev. For "
             "example, '--hdi 0.95' would instruct the program to utilize the 95% highest density interval (from each "
-            "bin) for these calculations."
+            "bin) for these calculations.",
+        "infer_pairs_source": "Infer sample pairs from names. This option assumes names of replicates will be identical "
+                            "with the exception of a final string denoted with a '_'. For example, these names would be "
+                            "considered two replicates of the same sample: VW_100_1X_A and VW_100_1X_B",
+        "flexible_reps_source": "will infer the number of replicates for each sample based on sample names, and will not "
+                            "require any specific number of replicates for inclusion. Therefore, some samples may have a "
+                            "single replicate, some may have 2, 3, 4 etc. And all replicates of a given sample will be "
+                            "considered for determining enriched peptides.",
+        "s_enrich_source": "All samples will be processed individually as samples with only one replicate",
+        "user_defined_source": "Metadata file containing all sample names and their source groups. "
+                            "Used to create pairs tsv to run pepsirf enrich module.""
     }
 
 plugin.pipelines.register_function(

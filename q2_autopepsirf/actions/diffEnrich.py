@@ -1,3 +1,4 @@
+from math import inf
 import pandas as pd
 import qiime2
 from collections import defaultdict
@@ -18,6 +19,10 @@ def diffEnrich(
     ctx,
     raw_data,
     bins,
+    infer_pairs_source=True,
+    flexible_reps_source=False,
+    s_enrich_source=False,
+    user_defined_source = None,
     negative_control=None,
     negative_id=None,
     negative_names=None,
@@ -154,34 +159,45 @@ def diffEnrich(
     )
 
     # create variables for source file creation
-    sourceDic = defaultdict(list)
-    sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
-    source = os.path.join(pepsirf_tsv_dir, "samples_source.tsv")
+    if infer_pairs_source or flexible_reps_source or s_enrich_source:
+        sourceDic = defaultdict(list)
+        sampleNM = sample_names.view(PepsirfInfoSNPNFormat)
+        source = os.path.join(pepsirf_tsv_dir, "samples_source.tsv")
 
 
-    # open samples file and collect samples into a dictionary
-    with open( str(sampleNM) ) as SN:
-        for line in SN:
-            sample = line.strip()
-            sourceLS = sample.rsplit('_', 1)
-            sourced = sourceLS[0]
-            sourceDic[sourced].append(sample)
-            if not negative_names and not negative_id and not negative_control:
-                negative_names.append(sample)
+        # open samples file and collect samples into a dictionary
+        with open( str(sampleNM) ) as SN:
+            for line in SN:
+                sample = line.strip()
+                sourceLS = sample.rsplit('_', 1)
+                sourced = sourceLS[0]
+                sourceDic[sourced].append(sample)
+                if not negative_names and not negative_id and not negative_control:
+                    negative_names.append(sample)
 
-    # create a source file written with column 1 as the sample names
-    # and the column 2 as the source column
-    # the source file will be put in the tsv directory
-    with open( source , "w" ) as tsvWriter:
-        writer = csv.writer(tsvWriter, delimiter='\t')
-        writer.writerow(['sampleID', 'source'])
-        for srce, samples in sourceDic.items():
-            if len(samples) > 1:
-                for name in samples:
-                    writer.writerow([name, srce])
+        # create a source file written with column 1 as the sample names
+        # and the column 2 as the source column
+        # the source file will be put in the tsv directory
+        with open( source , "w" ) as tsvWriter:
+            writer = csv.writer(tsvWriter, delimiter='\t')
+            writer.writerow(['sampleID', 'source'])
+            for srce, samples in sourceDic.items():
+                if flexible_reps_source:
+                    for name in samples:
+                            writer.writerow([name, srce])
+                elif s_enrich_source:
+                    for name in samples:
+                            writer.writerow([name, name])
+                elif infer_pairs_source:
+                    if len(samples) > 1:
+                        for name in samples:
+                            writer.writerow([name, srce])
 
-    # convert source file to metadata column to be used within the modules
-    source_col = qiime2.Metadata.load(source).get_column("source")
+        # convert source file to metadata column to be used within the modules
+        source_col = qiime2.Metadata.load(source).get_column("source")
+    
+    elif user_defined_source:
+        source_col = user_defined_source
 
     # run enrich module
     enrich_dir, = enrich(
