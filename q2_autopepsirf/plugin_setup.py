@@ -91,7 +91,7 @@ shared_parameter_description = {
                             "considered for determining enriched peptides.",
         "s_enrich_source": "All samples will be processed individually as samples with only one replicate",
         "user_defined_source": "Metadata file containing all sample names and their source groups. "
-                            "Used to create pairs tsv to run pepsirf enrich module.""
+                            "Used to create pairs tsv to run pepsirf enrich module."
     }
 
 plugin.pipelines.register_function(
