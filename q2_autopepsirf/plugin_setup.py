@@ -76,7 +76,8 @@ shared_parameter_description = {
         "pepsirf_tsv_dir": "Provide a directory path. Must also provide tsv-base-str for output of tsv verison of qza files."
                         " The source_samples file and png boxplot outputs will always be put within this directory.",
         "tsv_base_str": "The base name for the output tsv files excluding ay extensions, typcally the raw data filename "
-                        "(EX: --p-tsv-base-str raw_data). Must also provide pepsirf-tsv-dir",
+                        "(EX: --p-tsv-base-str raw_data). Must also provide pepsirf-tsv-dir, if pepsirf-tsv-dir provided without "
+                        "tsv-base-str, the default will be 'aps-output'.",
         "hdi": "Alternative approach for discarding outliers prior to calculating mean and stdev. If provided, this "
             "argument will override --trim, which trims evenly from both sides of the distribution. For --hdi, the "
             "user should provide the high density interval to be used for calculation of mean and stdev. For "

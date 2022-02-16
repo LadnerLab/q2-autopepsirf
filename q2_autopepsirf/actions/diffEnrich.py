@@ -42,6 +42,8 @@ def diffEnrich(
     if pepsirf_tsv_dir:
         if not os.path.isdir(pepsirf_tsv_dir):
             os.mkdir(pepsirf_tsv_dir)
+        if not tsv_base_str:
+            tsv_base_str = "aps-output"
 
     # collect the actions from ps-plot and q2-pepsirf to be executed
     norm = ctx.get_action('pepsirf', 'norm')
