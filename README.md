@@ -23,11 +23,6 @@ Visit: https://github.com/LadnerLab/q2-pepsirf1 for installation documentation o
 Visit: https://github.com/LadnerLab/q2-ps-plot for installation documentation on q2-ps-plot
 
 ### q2-pepsirf installation:
-#### Dependencies:
-- `qiime2-2021.11 +`
-- `PepSIRF`
-- `q2-pepsirf1`
-- `q2-ps-plot`
 
 #### Directions:
 
