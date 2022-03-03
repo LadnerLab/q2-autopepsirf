@@ -39,9 +39,13 @@ def diffEnrich(
     hdi = 0.95,
     pepsirf_binary = "pepsirf"
 ):
+    # if pepsirf_tsv_dir provided, make sure the provided dir is not a already created dir
+    # otherwise, make it a dir
     if pepsirf_tsv_dir:
         if not os.path.isdir(pepsirf_tsv_dir):
             os.mkdir(pepsirf_tsv_dir)
+
+        # if tsv_base_str not provided with pepsirf_tsv_dir set a default
         if not tsv_base_str:
             tsv_base_str = "aps-output"
 
@@ -66,6 +70,7 @@ def diffEnrich(
                     outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         cs_base = "%s_CS.tsv" % (tsv_base_str)
         cs_tsv = col_sum.view(PepsirfContingencyTSVFormat)
@@ -90,6 +95,7 @@ def diffEnrich(
                     outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         diff_base = "%s_SBD.tsv" % (tsv_base_str)
         diff_tsv = diff.view(PepsirfContingencyTSVFormat)
@@ -105,6 +111,7 @@ def diffEnrich(
                     outfile = os.path.join(pepsirf_tsv_dir, "norm.out"),
                     pepsirf_binary = pepsirf_binary)
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         diffR_base = "%s_SBDR.tsv" % (tsv_base_str)
         diffR_tsv = diff_ratio.view(PepsirfContingencyTSVFormat)
@@ -119,6 +126,7 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         zscore_base = "%s_Z-HDI%s.tsv" % (tsv_base_str, str(int(hdi*100)))
         zscore_tsv = zscore_out.view(PepsirfContingencyTSVFormat)
@@ -137,6 +145,7 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         sn_base = "%s_SN.tsv" % (tsv_base_str)
         sn_tsv = sample_names.view(PepsirfInfoSNPNFormat)
@@ -149,6 +158,7 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         rc_base = "%s_RC.tsv" % (tsv_base_str)
         rc_tsv = read_counts.view(PepsirfInfoSumOfProbesFmt)
@@ -216,6 +226,7 @@ def diffEnrich(
         pepsirf_binary = pepsirf_binary
     )
 
+    # convert the qza output into a tsv and save it
     if pepsirf_tsv_dir and tsv_base_str:
         if exact_z_thresh:
             enrich_zt = exact_z_thresh.split(",")

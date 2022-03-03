@@ -13,10 +13,14 @@ from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
 from q2_autopepsirf.actions.diffEnrich_tsv import diffEnrich_tsv
 
+# This is the plugin object. It is what the framework will load and what an
+# interface will interact with. Basically every registration we perform will
+# involve this object in some way.
 plugin = Plugin("autopepsirf", version=q2_autopepsirf.__version__,
                 website="https://github.com/LadnerLab/q2-autopepsirf",
                 description="Qiime2 plugin used for the automation of q2-pepsirf and q2-ps-plot.")
 
+# shared outputs for diffEnrich and diffEnrich tsv pipeline
 shared_outputs = [
         ("col_sum", FeatureTable[Normed]),
         ("diff", FeatureTable[NormedDifference]),
@@ -33,6 +37,7 @@ shared_outputs = [
         ("zenrich_scatter", Visualization)
     ]
 
+# shared paremters for diffEnrich and diffEnrich tsv pipeline
 shared_parameters = {
         'negative_id': Str,
         'negative_names': List[Str],
@@ -54,6 +59,7 @@ shared_parameters = {
 
     }
 
+# shared parameter descriptions for diffEnrich and diffEnrich tsv pipeline
 shared_parameter_description = {
         'negative_id': "Optional approach for identifying negative controls. Provide a unique string at the start of all "
                     "negative control samples.",
@@ -95,6 +101,7 @@ shared_parameter_description = {
                             "Used to create pairs tsv to run pepsirf enrich module."
     }
 
+# action set up for diffEnrich module
 plugin.pipelines.register_function(
     function=diffEnrich,
     inputs={
@@ -120,6 +127,7 @@ plugin.pipelines.register_function(
                 "pepsirf to generate Z scores that are used to determine enriched peptides"
 )
 
+# action set up for diffEnrich tsv pipeline
 plugin.pipelines.register_function(
     function=diffEnrich_tsv,
     inputs={},
