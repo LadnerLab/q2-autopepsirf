@@ -10,6 +10,15 @@ from q2_pepsirf.format_types import (
     EnrichThreshFileFormat
     )
 
+# Name: diffenrich
+# Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
+# Method Input/Parameters: default ctx, raw_data_tsv, bins_TSV, negative_controls_tsv, negative_ids,
+# negative_names, thresh_file_tsv, exact_z_thresh, exact_zenrich_thresh, step_z_thresh,
+# upper_z_thresh, lower_z_thresh, raw_constraint, pepsirf_binary
+# Method output/Returned: col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+# read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter, colsum_scatter
+# Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich), 
+# (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
 def diffEnrich_tsv(
     ctx,
     raw_data_tsv,
@@ -35,38 +44,46 @@ def diffEnrich_tsv(
     pepsirf_binary = "pepsirf"
     ):
 
+    # collect diffEnrich action
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
 
+    # import raw data into an artifact
     raw_data = ctx.make_artifact(
         type='FeatureTable[RawCounts]',
         view=raw_data_tsv,
         view_type=PepsirfContingencyTSVFormat
     )
 
+    # import bins into an artifact
     bins = ctx.make_artifact(
         type = 'PeptideBins',
         view = bins_tsv,
         view_type=PeptideBinFormat
     )
 
+    # if negative_control provided import into artifact
     if negative_control_tsv:
         negative_control = ctx.make_artifact(
             type='FeatureTable[Normed]',
             view=negative_control_tsv,
             view_type=PepsirfContingencyTSVFormat
         )
+    # otherwise set negative control to none
     else:
         negative_control = None
     
+    #if thresh-file provided import into artifact
     if thresh_file_tsv:
         thresh_file = ctx.make_artifact(
             type='EnrichThresh',
             view=thresh_file_tsv,
             view_type=EnrichThreshFileFormat
         )
+    #otherwise set thresh-file to none
     else:
         thresh_file = None
 
+    # run the diffEnrich module with all the inputs/parameters given
     ( col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
     read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
     zscore_scatter, colsum_scatter, zenrich_out, ) = diffEnrich(
@@ -93,6 +110,7 @@ def diffEnrich_tsv(
         pepsirf_binary = pepsirf_binary 
     )
 
+    # return all the qza and qzv files
     return (
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
