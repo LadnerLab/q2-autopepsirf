@@ -26,4 +26,12 @@ Visit: https://github.com/LadnerLab/q2-ps-plot for installation documentation on
 
 #### Directions:
 
-Visit: https://ladnerlab.github.io/pepsirf-q2-plugin-docs/Pepsirf_Plugins/q2-autopepsirf/ for installation/updating documentation on q2-autopepsirf.
+Visit: https://ladnerlab.github.io/pepsirf-q2-plugin-docs/Pepsirf_Plugins/q2-autopepsirf/ for installation documentation on q2-autopepsirf.
+
+#### Updating:
+
+Visit: https://ladnerlab.github.io/pepsirf-q2-plugin-docs/Pepsirf_Plugins/q2-autopepsirf/#updating for updating documentation on q2-autopepsirf
+
+## Tutorial
+
+Visit: https://ladnerlab.github.io/pepsirf-q2-plugin-docs/tutorials/pepsirf-tutorial/ for a tutorial on select modules.
