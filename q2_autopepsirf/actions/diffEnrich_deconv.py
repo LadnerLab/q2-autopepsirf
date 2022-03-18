@@ -46,7 +46,7 @@ def diffEnrich_deconv(
     score_overlap_threshold: float = 0.0,
     id_name_map: PepsirfDMPFormat = None,
     single_threaded: bool = False,
-    outfile: str = "./deconve.tsv",
+    outfile: str = "./deconv.tsv",
     pepsirf_binary = "pepsirf"
 ):
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')

@@ -8,13 +8,17 @@ from q2_pepsirf.format_types import (
     PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat,
     PepsirfContingencyTSVFormat, ZscoreNanFormat,
     EnrichedPeptideDirFmt, PeptideBinFormat,
-    EnrichThreshFileFormat
+    EnrichThreshFileFormat, PeptideIDListFmt,
+    PepsirfLinkTSVFormat, PepsirfDMPFormat
     )
 
-def diffEnrich_deconv(
+def diffEnrich_deconv_tsv(
     ctx,
     raw_data_tsv,
     bins_tsv,
+    enriched: PeptideIDListFmt,
+    threshold: int,
+    linked: PepsirfLinkTSVFormat,
     infer_pairs_source=True,
     flexible_reps_source=False,
     s_enrich_source=False,
@@ -33,11 +37,17 @@ def diffEnrich_deconv(
     lower_z_thresh = 5,
     raw_constraint = 300000,
     hdi = 0.95,
+    scoring_strategy: str = "summation",
+    score_filtering: bool = False,
+    score_tie_threshold: float = 0.0,
+    score_overlap_threshold: float = 0.0,
+    id_name_map: PepsirfDMPFormat = None,
+    single_threaded: bool = False,
+    outfile: str = "./deconv.out",
     pepsirf_binary = "pepsirf"
     ):
 
-    diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
-    deconv = ctx.get_action('pepsirf', 'deconv')
+    diffEnrich_deconv = ctx.get_action('autopepsirf', 'diffEnrich_deconv')
 
     raw_data = ctx.make_artifact(
         type = 'FeatureTable[RawCounts]',
@@ -72,11 +82,15 @@ def diffEnrich_deconv(
     else:
         thresh_file = None
 
-    ( col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
-    read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
-    zscore_scatter, colsum_scatter, zenrich_out, ) = diffEnrich(
+    (col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+        read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
+        zscore_scatter, colsum_scatter, zenrich_out, dir_out, score_per_round, 
+        map_dir, ) = diffEnrich_deconv(
         raw_data = raw_data,
         bins = bins,
+        enriched = enriched,
+        threshold = threshold,
+        linked = linked,
         infer_pairs_source = infer_pairs_source,
         flexible_reps_source = flexible_reps_source,
         s_enrich_source = s_enrich_source,
@@ -95,16 +109,21 @@ def diffEnrich_deconv(
         lower_z_thresh = lower_z_thresh,
         raw_constraint = raw_constraint,
         hdi = hdi,
+        scoring_strategy = scoring_strategy,
+        score_filtering = score_filtering,
+        score_tie_threshold = score_tie_threshold,
+        score_overlap_threshold = score_overlap_threshold,
+        id_name_map = id_name_map,
+        single_threaded = single_threaded,
+        outfile = outfile,
         pepsirf_binary = pepsirf_binary 
     )
-
-    #run through deconv
-
-    deconv_out = deconv(
-        #parameters here
-    )
-
     #plot? I just run through deconv that's all I really know
+
+    return ( col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+        read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
+        zscore_scatter, colsum_scatter, zenrich_out, dir_out, score_per_round, 
+        map_dir, )
     
 
 
