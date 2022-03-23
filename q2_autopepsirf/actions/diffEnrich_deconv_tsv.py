@@ -11,6 +11,7 @@ def diffEnrich_deconv_tsv(
     bins_tsv,
     linked_tsv,
     threshold_deconv,
+    mapfile_suffix,
     id_name_map_tsv=None,
     infer_pairs_source=True,
     flexible_reps_source=False,
@@ -35,6 +36,7 @@ def diffEnrich_deconv_tsv(
     score_tie_threshold = 0.0,
     score_overlap_threshold = 0.0,
     single_threaded = False,
+    remove_file_types = False,
     pepsirf_binary = "pepsirf"
     ):
 
@@ -95,6 +97,7 @@ def diffEnrich_deconv_tsv(
         raw_data = raw_data,
         bins = bins,
         threshold = threshold_deconv,
+        mapfile_suffix = mapfile_suffix,
         linked = linked,
         infer_pairs_source = infer_pairs_source,
         flexible_reps_source = flexible_reps_source,
@@ -120,6 +123,7 @@ def diffEnrich_deconv_tsv(
         score_overlap_threshold = score_overlap_threshold,
         id_name_map = id_name_map,
         single_threaded = single_threaded,
+        remove_file_types = remove_file_types,
         pepsirf_binary = pepsirf_binary 
     )
     #plot? I just run through deconv that's all I really know

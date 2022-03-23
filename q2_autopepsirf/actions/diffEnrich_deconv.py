@@ -10,6 +10,7 @@ def diffEnrich_deconv(
     raw_data,
     bins,
     deconv_threshold: int,
+    mapfile_suffix: str,
     linked: PepsirfLinkTSVFormat,
     scoring_strategy: str = "summation",
     infer_pairs_source=True,
@@ -35,6 +36,7 @@ def diffEnrich_deconv(
     score_overlap_threshold: float = 0.0,
     id_name_map: PepsirfDMPFormat = None,
     single_threaded: bool = False,
+    remove_file_types: bool = False,
     pepsirf_binary = "pepsirf"
 ):
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
@@ -69,6 +71,7 @@ def diffEnrich_deconv(
     (dir_out, score_per_round, map_dir, ) = deconv(
         enriched = enrich_dir,
         threshold = deconv_threshold,
+        mapfile_suffix = mapfile_suffix,
         linked = linked,
         scoring_strategy = scoring_strategy,
         score_filtering = score_filtering,
@@ -76,6 +79,7 @@ def diffEnrich_deconv(
         score_overlap_threshold = score_overlap_threshold,
         id_name_map = id_name_map,
         single_threaded = single_threaded,
+        remove_file_types = remove_file_types,
         outfile = os.path.join(pepsirf_tsv_dir, "deconv.out"),
         pepsirf_binary = pepsirf_binary
     )
