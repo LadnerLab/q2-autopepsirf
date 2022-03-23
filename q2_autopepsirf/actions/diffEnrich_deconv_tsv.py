@@ -1,14 +1,7 @@
-from math import inf
-import pandas as pd
-import qiime2
-from collections import defaultdict
-import csv, os
-
 from q2_pepsirf.format_types import (
-    PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat,
-    PepsirfContingencyTSVFormat, ZscoreNanFormat,
-    EnrichedPeptideDirFmt, PeptideBinFormat,
-    EnrichThreshFileFormat, PeptideIDListFmt,
+    PepsirfContingencyTSVFormat,
+    PeptideBinFormat,
+    EnrichThreshFileFormat,
     PepsirfLinkTSVFormat, PepsirfDMPFormat
     )
 
@@ -16,9 +9,9 @@ def diffEnrich_deconv_tsv(
     ctx,
     raw_data_tsv,
     bins_tsv,
-    enriched: PeptideIDListFmt,
-    threshold: int,
-    linked: PepsirfLinkTSVFormat,
+    linked_tsv,
+    threshold_deconv,
+    id_name_map_tsv=None,
     infer_pairs_source=True,
     flexible_reps_source=False,
     s_enrich_source=False,
@@ -37,13 +30,11 @@ def diffEnrich_deconv_tsv(
     lower_z_thresh = 5,
     raw_constraint = 300000,
     hdi = 0.95,
-    scoring_strategy: str = "summation",
-    score_filtering: bool = False,
-    score_tie_threshold: float = 0.0,
-    score_overlap_threshold: float = 0.0,
-    id_name_map: PepsirfDMPFormat = None,
-    single_threaded: bool = False,
-    outfile: str = "./deconv.out",
+    scoring_strategy = "summation",
+    score_filtering = False,
+    score_tie_threshold = 0.0,
+    score_overlap_threshold = 0.0,
+    single_threaded = False,
     pepsirf_binary = "pepsirf"
     ):
 
@@ -78,6 +69,21 @@ def diffEnrich_deconv_tsv(
             view=thresh_file_tsv,
             view_type=EnrichThreshFileFormat
         )
+
+    if linked_tsv:
+        linked = ctx.make_artifact(
+            type='Link',
+            view=linked_tsv,
+            view_type=PepsirfLinkTSVFormat
+        )
+
+    if id_name_map_tsv:
+        id_name_map = ctx.make_artifact(
+            type='PepsirfDMP',
+            view=id_name_map_tsv,
+            view_type=PepsirfDMPFormat
+        )
+
     #otherwise set thresh-file to none
     else:
         thresh_file = None
@@ -88,8 +94,7 @@ def diffEnrich_deconv_tsv(
         map_dir, ) = diffEnrich_deconv(
         raw_data = raw_data,
         bins = bins,
-        enriched = enriched,
-        threshold = threshold,
+        threshold = threshold_deconv,
         linked = linked,
         infer_pairs_source = infer_pairs_source,
         flexible_reps_source = flexible_reps_source,
@@ -115,7 +120,6 @@ def diffEnrich_deconv_tsv(
         score_overlap_threshold = score_overlap_threshold,
         id_name_map = id_name_map,
         single_threaded = single_threaded,
-        outfile = outfile,
         pepsirf_binary = pepsirf_binary 
     )
     #plot? I just run through deconv that's all I really know

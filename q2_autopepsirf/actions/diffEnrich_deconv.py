@@ -1,16 +1,6 @@
-from math import inf
-import pandas as pd
-import qiime2
-from collections import defaultdict
-import csv, os
+import os
 
 from q2_pepsirf.format_types import (
-    PepsirfInfoSumOfProbesFmt, 
-    PepsirfInfoSNPNFormat, 
-    PepsirfContingencyTSVFormat, 
-    ZscoreNanFormat, 
-    EnrichedPeptideDirFmt,
-    PeptideIDListFmt,
     PepsirfLinkTSVFormat,
     PepsirfDMPFormat
 )
@@ -19,8 +9,7 @@ def diffEnrich_deconv(
     ctx,
     raw_data,
     bins,
-    enriched: PeptideIDListFmt,
-    threshold: int,
+    deconv_threshold: int,
     linked: PepsirfLinkTSVFormat,
     scoring_strategy: str = "summation",
     infer_pairs_source=True,
@@ -46,7 +35,6 @@ def diffEnrich_deconv(
     score_overlap_threshold: float = 0.0,
     id_name_map: PepsirfDMPFormat = None,
     single_threaded: bool = False,
-    outfile: str = "./deconv.tsv",
     pepsirf_binary = "pepsirf"
 ):
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
@@ -79,8 +67,8 @@ def diffEnrich_deconv(
     )
 
     (dir_out, score_per_round, map_dir, ) = deconv(
-        enriched = enriched,
-        threshold = threshold,
+        enriched = enrich_dir,
+        threshold = deconv_threshold,
         linked = linked,
         scoring_strategy = scoring_strategy,
         score_filtering = score_filtering,
@@ -88,7 +76,7 @@ def diffEnrich_deconv(
         score_overlap_threshold = score_overlap_threshold,
         id_name_map = id_name_map,
         single_threaded = single_threaded,
-        outfile = outfile,
+        outfile = os.path.join(pepsirf_tsv_dir, "deconv.out"),
         pepsirf_binary = pepsirf_binary
     )
 
