@@ -9,9 +9,11 @@ import q2_autopepsirf
 from q2_types.feature_table import FeatureTable
 from q2_pepsirf.format_types import (RawCounts, Normed, NormedDifference,
                 NormedDiffRatio, PeptideBins, Zscore, ZscoreNan, InfoSNPN,
-                EnrichThresh, PairwiseEnrichment, InfoSumOfProbes)
+                EnrichThresh, PairwiseEnrichment, InfoSumOfProbes, DeconvBatch,
+                PeptideAssignmentMap, ScorePerRound, Link, PepsirfDMP)
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
 from q2_autopepsirf.actions.diffEnrich_tsv import diffEnrich_tsv
+from q2_autopepsirf.actions.diffEnrich_deconv import diffEnrich_deconv
 
 # This is the plugin object. It is what the framework will load and what an
 # interface will interact with. Basically every registration we perform will
@@ -153,4 +155,43 @@ plugin.pipelines.register_function(
     name='diffEnrich tsv Pepsirf Pipeline',
     description="Uses the diff normaization from "
                 "pepsirf to generate Z scores that are used to determine enriched peptides"
+)
+
+plugin.pipelines.register_function(
+    function=diffEnrich_deconv,
+    inputs={
+        'raw_data': FeatureTable[RawCounts],
+        'negative_control': FeatureTable[Normed],
+        'bins': PeptideBins,
+        'thresh_file': EnrichThresh,
+        'linked':Link,
+        'id_name_map':PepsirfDMP,
+    },
+    outputs={
+        ('dir_out', DeconvBatch),
+        ('score_per_round', ScorePerRound),
+        ('map_dir', PeptideAssignmentMap),
+        *shared_outputs
+    },
+    parameters={
+        'deconv_threshold': Int,
+        'mapfile_suffix' : Str,
+        'outfile_suffix' : Str,
+        'scoring_strategy' : Str,
+        'score_filtering' : Bool,
+        'score_tie_threshold' : Float,
+        'score_overlap_threshold' : Float,
+        'single_threaded' : Bool,
+        'remove_file_types' : Bool,
+        **shared_parameters,
+    },
+    input_descriptions=None,
+    output_descriptions=None,
+    parameter_descriptions={
+        **shared_parameter_description
+    },
+    name='diffEnrich deconv Pepsirf Pipeline',
+    description="Uses the diff normalization from "
+                "pepsirf to generate z scores that are used to determine enriched peptides"
+                "and **ADD DECONV DESCRIPTION**"
 )

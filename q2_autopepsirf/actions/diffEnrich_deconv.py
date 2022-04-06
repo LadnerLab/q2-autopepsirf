@@ -2,7 +2,8 @@ import os
 
 from q2_pepsirf.format_types import (
     PepsirfLinkTSVFormat,
-    PepsirfDMPFormat
+    PepsirfDMPFormat,
+    PepsirfDeconvBatchDirFmt
 )
 
 def diffEnrich_deconv(
@@ -86,7 +87,16 @@ def diffEnrich_deconv(
         pepsirf_binary = pepsirf_binary
     )
 
-    return ( col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+    if pepsirf_tsv_dir and tsv_base_str:
+        deconv_base = "%s_deconv_dir.tsv" % (tsv_base_str)
+        deconv_tsv = dir_out.view(PepsirfDeconvBatchDirFmt)
+        deconv_tsv.save(os.path.join(pepsirf_tsv_dir, deconv_base), ext = ".tsv")
+
+    
+
+    return (
+        dir_out, score_per_round, map_dir, col_sum, diff, diff_ratio, 
+        zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
-        zscore_scatter, colsum_scatter, zenrich_out, dir_out, score_per_round, 
-        map_dir, )
+        zscore_scatter, colsum_scatter, zenrich_out
+    )

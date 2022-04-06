@@ -72,13 +72,15 @@ def diffEnrich_deconv_tsv(
             view=thresh_file_tsv,
             view_type=EnrichThreshFileFormat
         )
+    #otherwise set thresh-file to none
+    else:
+        thresh_file = None
 
-    if linked_tsv:
-        linked = ctx.make_artifact(
-            type='Link',
-            view=linked_tsv,
-            view_type=PepsirfLinkTSVFormat
-        )
+    linked = ctx.make_artifact(
+        type='Link',
+        view=linked_tsv,
+        view_type=PepsirfLinkTSVFormat
+    )
 
     if id_name_map_tsv:
         id_name_map = ctx.make_artifact(
@@ -86,10 +88,10 @@ def diffEnrich_deconv_tsv(
             view=id_name_map_tsv,
             view_type=PepsirfDMPFormat
         )
-
-    #otherwise set thresh-file to none
     else:
-        thresh_file = None
+        id_name_map = None
+
+    
 
     (col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
@@ -128,12 +130,13 @@ def diffEnrich_deconv_tsv(
         remove_file_types = remove_file_types,
         pepsirf_binary = pepsirf_binary 
     )
-    #plot? I just run through deconv that's all I really know
 
-    return ( col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+    return ( 
+        dir_out, score_per_round, 
+        map_dir, col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
-        zscore_scatter, colsum_scatter, zenrich_out, dir_out, score_per_round, 
-        map_dir, )
+        zscore_scatter, colsum_scatter, zenrich_out
+    )
     
 
 
