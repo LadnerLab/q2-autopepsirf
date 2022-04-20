@@ -133,20 +133,20 @@ plugin.pipelines.register_function(
     inputs={},
     outputs=shared_outputs,
     parameters={
-        'raw_data_tsv': Str,
-        'negative_control_tsv': Str,
-        'bins_tsv': Str,
-        'thresh_file_tsv': Str,
+        'raw_data_filepath': Str,
+        'negative_control_filepath': Str,
+        'bins_filepath': Str,
+        'thresh_file_filepath': Str,
         **shared_parameters
     },
     input_descriptions=None,
     output_descriptions=None,
     parameter_descriptions={
-        'raw_data_tsv': "Raw data matrix in .tsv format.",
-        'negative_control_tsv': "Name of .tsv matrix file containing data for sb samples.",
-        'bins_tsv': "Name of the file containing bins, one bin per line, as output by the bin module. Each bin contains a "
+        'raw_data_filepath': "Raw data matrix in .tsv format.",
+        'negative_control_filepath': "Name of .tsv matrix file containing data for sb samples.",
+        'bins_filepath': "Name of the file containing bins, one bin per line, as output by the bin module. Each bin contains a "
                         "tab-delimited list of peptide names.",
-        'thresh_file_tsv': "The name of a tab-delimited file containing one tab-delimited matrix filename "
+        'thresh_file_filepath': "The name of a tab-delimited file containing one tab-delimited matrix filename "
                             "and threshold(s), one per line. If providing more than z score matrix.",
         **shared_parameter_description
     },
