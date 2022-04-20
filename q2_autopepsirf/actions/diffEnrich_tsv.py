@@ -12,8 +12,8 @@ from q2_pepsirf.format_types import (
 
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
-# Method Input/Parameters: default ctx, raw_data_tsv, bins_TSV, negative_controls_tsv, negative_ids,
-# negative_names, thresh_file_tsv, exact_z_thresh, exact_zenrich_thresh, step_z_thresh,
+# Method Input/Parameters: default ctx, raw_data_filepath, bins_filepath, negative_controls_filepath, negative_ids,
+# negative_names, thresh_file_filepath, exact_z_thresh, exact_zenrich_thresh, step_z_thresh,
 # upper_z_thresh, lower_z_thresh, raw_constraint, pepsirf_binary
 # Method output/Returned: col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
 # read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter, colsum_scatter
@@ -21,16 +21,16 @@ from q2_pepsirf.format_types import (
 # (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
 def diffEnrich_tsv(
     ctx,
-    raw_data_tsv,
-    bins_tsv,
+    raw_data_filepath,
+    bins_filepath,
     infer_pairs_source=True,
     flexible_reps_source=False,
     s_enrich_source=False,
     user_defined_source = None,
-    negative_control_tsv=None,
+    negative_control_filepath=None,
     negative_id=None,
     negative_names=None,
-    thresh_file_tsv = None,
+    thresh_file_filepath = None,
     exact_z_thresh = None,
     exact_cs_thresh = "20",
     exact_zenrich_thresh = None,
@@ -50,22 +50,22 @@ def diffEnrich_tsv(
     # import raw data into an artifact
     raw_data = ctx.make_artifact(
         type='FeatureTable[RawCounts]',
-        view=raw_data_tsv,
+        view=raw_data_filepath,
         view_type=PepsirfContingencyTSVFormat
     )
 
     # import bins into an artifact
     bins = ctx.make_artifact(
         type = 'PeptideBins',
-        view = bins_tsv,
+        view = bins_filepath,
         view_type=PeptideBinFormat
     )
 
     # if negative_control provided import into artifact
-    if negative_control_tsv:
+    if negative_control_filepath:
         negative_control = ctx.make_artifact(
             type='FeatureTable[Normed]',
-            view=negative_control_tsv,
+            view=negative_control_filepath,
             view_type=PepsirfContingencyTSVFormat
         )
     # otherwise set negative control to none
@@ -73,10 +73,10 @@ def diffEnrich_tsv(
         negative_control = None
     
     #if thresh-file provided import into artifact
-    if thresh_file_tsv:
+    if thresh_file_filepath:
         thresh_file = ctx.make_artifact(
             type='EnrichThresh',
-            view=thresh_file_tsv,
+            view=thresh_file_filepath,
             view_type=EnrichThreshFileFormat
         )
     #otherwise set thresh-file to none
