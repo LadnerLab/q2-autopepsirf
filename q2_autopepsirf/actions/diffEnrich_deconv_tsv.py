@@ -10,7 +10,7 @@ def diffEnrich_deconv_tsv(
     raw_data_tsv,
     bins_tsv,
     linked_tsv,
-    threshold_deconv,
+    deconv_threshold,
     mapfile_suffix,
     outfile_suffix,
     id_name_map_tsv=None,

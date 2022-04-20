@@ -71,7 +71,7 @@ def diffEnrich_deconv(
     )
 
     (dir_out, score_per_round, map_dir, ) = deconv(
-        enriched = enrich_dir,
+        enriched_dir = enrich_dir,
         threshold = deconv_threshold,
         mapfile_suffix = mapfile_suffix,
         outfile_suffix = outfile_suffix,
