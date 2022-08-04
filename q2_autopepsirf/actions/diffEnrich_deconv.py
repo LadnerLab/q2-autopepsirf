@@ -70,7 +70,7 @@ def diffEnrich_deconv(
         pepsirf_binary = pepsirf_binary 
     )
 
-    (dir_out, score_per_round, map_dir, ) = deconv(
+    (dir_out, score_per_round, map_dir ) = deconv(
         enriched_dir = enrich_dir,
         threshold = deconv_threshold,
         mapfile_suffix = mapfile_suffix,

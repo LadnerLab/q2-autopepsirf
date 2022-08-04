@@ -168,12 +168,24 @@ plugin.pipelines.register_function(
         'linked':Link,
         'id_name_map':PepsirfDMP,
     },
-    outputs={
+    outputs=[
         ('dir_out', DeconvBatch),
         ('score_per_round', ScorePerRound),
         ('map_dir', PeptideAssignmentMap),
-        *shared_outputs
-    },
+        ("col_sum", FeatureTable[Normed]),
+        ("diff", FeatureTable[NormedDifference]),
+        ("diff_ratio", FeatureTable[NormedDiffRatio]),
+        ("zscore", FeatureTable[Zscore]),
+        ("zscore_nan", ZscoreNan),
+        ("sample_names", InfoSNPN),
+        ("read_counts", InfoSumOfProbes),
+        ("rc_boxplot", Visualization),
+        ("enrich", PairwiseEnrichment),
+        ("enrich_count_boxplot", Visualization),
+        ("zscore_scatter", Visualization),
+        ("colsum_scatter", Visualization),
+        ("zenrich_scatter", Visualization)
+    ],
     parameters={
         'deconv_threshold': Int,
         'mapfile_suffix' : Str,
