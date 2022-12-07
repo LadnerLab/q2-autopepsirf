@@ -214,12 +214,12 @@ plugin.pipelines.register_function(
     inputs={
         
     },
-    outputs={
+    outputs=[
         ('dir_out', DeconvBatch),
         ('score_per_round', ScorePerRound),
         ('map_dir', PeptideAssignmentMap),
         *shared_outputs
-    },
+    ],
     parameters={
         'deconv_threshold': Int,
         'mapfile_suffix' : Str,
