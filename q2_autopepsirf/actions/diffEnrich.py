@@ -13,7 +13,7 @@ from q2_pepsirf.format_types import PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFo
 # upper_z_thresh, lower_z_thresh, raw_constraint, pepsirf_binary
 # Method output/Returned: col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
 # read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter, colsum_scatter
-# Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich), 
+# Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich),
 # (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
 def diffEnrich(
     ctx,
@@ -207,13 +207,14 @@ def diffEnrich(
 
         # convert source file to metadata column to be used within the modules
         source_col = qiime2.Metadata.load(source).get_column("source")
-    
+
     elif user_defined_source:
         source_col = user_defined_source
 
     # run enrich module
     enrich_dir, = enrich(
         source = source_col,
+        flex_reps = flexible_reps_source,
         thresh_file = thresh_file,
         zscores = zscore_out,
         col_sum = col_sum,
