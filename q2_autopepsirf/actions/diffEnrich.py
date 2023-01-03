@@ -275,6 +275,7 @@ def diffEnrich(
     zenrich_out, = zenrich(
         data = col_sum,
         zscores = zscore_out,
+        flex_reps = flexible_reps_source,
         negative_controls = negative_names,
         negative_id = negative_id,
         source = source_col,
