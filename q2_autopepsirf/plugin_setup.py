@@ -100,7 +100,7 @@ shared_parameter_description = {
                             "single replicate, some may have 2, 3, 4 etc. And all replicates of a given sample will be "
                             "considered for determining enriched peptides.",
         "s_enrich_source": "All samples will be processed individually as samples with only one replicate",
-        "low_raw_reads": "!!!PUT DESCRIPTION HERE!!!",
+        "low_raw_reads": "By default samples with any replicates below the raw read threshold will be dropped when this flag is included, replicates with reads above the threshold will be kept.",
         "user_defined_source": "Metadata file containing all sample names and their source groups. "
                             "Used to create pairs tsv to run pepsirf enrich module."
     }
