@@ -41,10 +41,6 @@ def diffEnrich(
     pepsirf_binary = "pepsirf"
 ):
 
-    # REMOVE: for testing pipeline
-    if low_raw_reads:
-        print("Low raw reads passed through diffEnrich!")
-
     # if pepsirf_tsv_dir provided, make sure the provided dir is not a already created dir
     # otherwise, make it a dir
     if pepsirf_tsv_dir:

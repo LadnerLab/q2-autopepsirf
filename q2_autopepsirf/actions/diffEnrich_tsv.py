@@ -45,10 +45,6 @@ def diffEnrich_tsv(
     pepsirf_binary = "pepsirf"
     ):
 
-    # REMOVE: for testing pipeline
-    if low_raw_reads:
-        print("Low raw reads passed through diffEnrich_tsv!")
-
     # collect diffEnrich action
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
 
