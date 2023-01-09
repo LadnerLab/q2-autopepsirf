@@ -40,9 +40,14 @@ def diffEnrich_tsv(
     upper_z_thresh = 30,
     lower_z_thresh = 5,
     raw_constraint = 300000,
+    low_raw_reads = False,
     hdi = 0.95,
     pepsirf_binary = "pepsirf"
     ):
+
+    # REMOVE: for testing pipeline
+    if low_raw_reads:
+        print("Low raw reads passed through diffEnrich_tsv!")
 
     # collect diffEnrich action
     diffEnrich = ctx.get_action('autopepsirf', 'diffEnrich')
@@ -106,6 +111,7 @@ def diffEnrich_tsv(
         upper_z_thresh = upper_z_thresh,
         lower_z_thresh = lower_z_thresh,
         raw_constraint = raw_constraint,
+        low_raw_reads = low_raw_reads,
         hdi = hdi,
         pepsirf_binary = pepsirf_binary 
     )

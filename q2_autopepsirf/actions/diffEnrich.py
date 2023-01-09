@@ -36,9 +36,15 @@ def diffEnrich(
     upper_z_thresh = 30,
     lower_z_thresh = 5,
     raw_constraint = 300000,
+    low_raw_reads = False,
     hdi = 0.95,
     pepsirf_binary = "pepsirf"
 ):
+
+    # REMOVE: for testing pipeline
+    if low_raw_reads:
+        print("Low raw reads passed through diffEnrich!")
+
     # if pepsirf_tsv_dir provided, make sure the provided dir is not a already created dir
     # otherwise, make it a dir
     if pepsirf_tsv_dir:
@@ -222,6 +228,7 @@ def diffEnrich(
         raw_scores = raw_data,
         raw_constraint = raw_constraint,
         enrichment_failure = True,
+        low_raw_reads = low_raw_reads,
         outfile = os.path.join(pepsirf_tsv_dir, "enrich.out"),
         pepsirf_binary = pepsirf_binary
     )

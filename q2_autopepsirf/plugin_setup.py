@@ -58,8 +58,8 @@ shared_parameters = {
         'infer_pairs_source': Bool,
         'flexible_reps_source': Bool,
         's_enrich_source': Bool,
+        'low_raw_reads': Bool,
         'user_defined_source': MetadataColumn[Categorical]
-
     }
 
 # shared parameter descriptions for diffEnrich and diffEnrich tsv pipeline
@@ -100,6 +100,7 @@ shared_parameter_description = {
                             "single replicate, some may have 2, 3, 4 etc. And all replicates of a given sample will be "
                             "considered for determining enriched peptides.",
         "s_enrich_source": "All samples will be processed individually as samples with only one replicate",
+        "low_raw_reads": "!!!PUT DESCRIPTION HERE!!!",
         "user_defined_source": "Metadata file containing all sample names and their source groups. "
                             "Used to create pairs tsv to run pepsirf enrich module."
     }
@@ -196,6 +197,7 @@ plugin.pipelines.register_function(
         'score_overlap_threshold' : Float,
         'single_threaded' : Bool,
         'remove_file_types' : Bool,
+        'low_raw_reads': Bool,
         **shared_parameters,
     },
     input_descriptions=None,
@@ -236,6 +238,7 @@ plugin.pipelines.register_function(
         'thresh_file_tsv': Str,
         'linked_tsv' : Str,
         'id_name_map_tsv' : Str,
+        'low_raw_reads': Bool,
         **shared_parameters,
     },
     input_descriptions=None,
