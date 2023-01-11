@@ -10,7 +10,7 @@ from q2_pepsirf.format_types import PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFo
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
 # Method Input/Parameters: default ctx, raw_data, bins, negative_controls, negative_ids,
 # negative_names, thresh_file, exact_z_thresh, exact_zenrich_thresh, step_z_thresh,
-# upper_z_thresh, lower_z_thresh, raw_constraint, pepsirf_binary
+# upper_z_thresh, lower_z_thresh, raw_constraint, low_raw_reads, pepsirf_binary
 # Method output/Returned: col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
 # read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter, colsum_scatter
 # Dependencies: (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich), 
