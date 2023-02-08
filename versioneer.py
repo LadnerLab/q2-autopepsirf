@@ -309,11 +309,11 @@ def get_root():
         versioneer_py = os.path.join(root, "versioneer.py")
     if not (os.path.exists(setup_py) or os.path.exists(versioneer_py)):
         err = (
-            "Versioneer was unable to run the project root directory. "
-            "Versioneer requires setup.py to be executed from its immediate "
-            "directory (like 'python setup.py COMMAND'), or in a way that "
-            "lets it use sys.argv[0] to find the root "
-            "(like 'python path/to/setup.py COMMAND')."
+            "Versioneer was unable to run the project root directory."
+            " Versioneer requires setup.py to be executed from its immediate"
+            " directory (like 'python setup.py COMMAND'), or in a way that"
+            " lets it use sys.argv[0] to find the root"
+            " (like 'python path/to/setup.py COMMAND')."
         )
         raise VersioneerBadRootError(err)
     try:
@@ -756,9 +756,9 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
         mo = re.search(r'^(.+)-(\d+)-g([0-9a-f]+)$', git_describe)
         if not mo:
             # unparsable. Maybe git-describe is misbehaving?
-            pieces["error"] = ("unable to parse git-describe output: '%%s'"
-                               %% describe_out
-                               )
+            pieces["error"] = (
+                "unable to parse git-describe output: '%%s'" %% describe_out
+            )
             return pieces
 
         # tag
@@ -767,9 +767,10 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
             if verbose:
                 fmt = "tag '%%s' doesn't start with prefix '%%s'"
                 print(fmt %% (full_tag, tag_prefix))
-            pieces["error"] = ("tag '%%s' doesn't start with prefix '%%s'"
-                               %% (full_tag, tag_prefix)
-                               )
+            pieces["error"] = (
+                "tag '%%s' doesn't start with prefix '%%s'"
+                %% (full_tag, tag_prefix)
+            )
             return pieces
         pieces["closest-tag"] = full_tag[len(tag_prefix):]
 
@@ -824,9 +825,9 @@ def render_pep440(pieces):
                 rendered += ".dirty"
     else:
         # exception #1
-        rendered = ("0+untagged.%%d.g%%s"
-                    %% (pieces["distance"], pieces["short"])
-                    )
+        rendered = (
+            "0+untagged.%%d.g%%s" %% (pieces["distance"], pieces["short"])
+        )
         if pieces["dirty"]:
             rendered += ".dirty"
     return rendered
@@ -855,9 +856,9 @@ def render_pep440_branch(pieces):
         rendered = "0"
         if pieces["branch"] != "master":
             rendered += ".dev0"
-        rendered += ("+untagged.%%d.g%%s"
-                     %% (pieces["distance"], pieces["short"])
-                     )
+        rendered += (
+            "+untagged.%%d.g%%s" %% (pieces["distance"], pieces["short"])
+        )
         if pieces["dirty"]:
             rendered += ".dirty"
     return rendered
@@ -887,9 +888,9 @@ def render_pep440_pre(pieces):
             )
             rendered = tag_version
             if post_version is not None:
-                rendered += (".post%%d.dev%%d"
-                             %% (post_version+1, pieces["distance"])
-                             )
+                rendered += (
+                    ".post%%d.dev%%d" %% (post_version+1, pieces["distance"])
+                )
             else:
                 rendered += ".post0.dev%%d" %% (pieces["distance"])
         else:
@@ -1314,9 +1315,9 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
         mo = re.search(r'^(.+)-(\d+)-g([0-9a-f]+)$', git_describe)
         if not mo:
             # unparsable. Maybe git-describe is misbehaving?
-            pieces["error"] = ("unable to parse git-describe output: '%s'"
-                               % describe_out
-                               )
+            pieces["error"] = (
+                "unable to parse git-describe output: '%s'" % describe_out
+            )
             return pieces
 
         # tag
@@ -1325,9 +1326,10 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
             if verbose:
                 fmt = "tag '%s' doesn't start with prefix '%s'"
                 print(fmt % (full_tag, tag_prefix))
-            pieces["error"] = ("tag '%s' doesn't start with prefix '%s'"
-                               % (full_tag, tag_prefix)
-                               )
+            pieces["error"] = (
+                "tag '%s' doesn't start with prefix '%s'"
+                % (full_tag, tag_prefix)
+            )
             return pieces
         pieces["closest-tag"] = full_tag[len(tag_prefix):]
 
@@ -2222,3 +2224,4 @@ if __name__ == "__main__":
         errors += scan_setup_py()
         if errors:
             sys.exit(1)
+

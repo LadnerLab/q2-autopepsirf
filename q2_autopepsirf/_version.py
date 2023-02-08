@@ -286,8 +286,7 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
     pieces["error"] = None
 
     branch_name, rc = runner(
-        GITS, ["rev-parse", "--abbrev-ref", "HEAD"],
-        cwd=root
+        GITS, ["rev-parse", "--abbrev-ref", "HEAD"], cwd=root
     )
     # --abbrev-ref was added in git-1.6.3
     if rc != 0 or branch_name is None:
@@ -369,9 +368,7 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
 
     # commit date: see ISO-8601 comment in git_versions_from_keywords()
     date = runner(
-        GITS,
-        ["show", "-s", "--format=%ci", "HEAD"],
-        cwd=root
+        GITS, ["show", "-s", "--format=%ci", "HEAD"], cwd=root
     )[0].strip()
     # Use only the last line.  Previous lines may contain GPG signature
     # information.

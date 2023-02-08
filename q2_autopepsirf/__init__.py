@@ -1,7 +1,10 @@
 from . import _version
 
-__all__ = ['diffEnrich', 'diffEnrich_tsv', 'diffEnrich_deconv', 'diffEnrich_deconv_tsv']
-__version__ = _version.get_versions()['version']
+__all__ = [
+    "diffEnrich", "diffEnrich_tsv",
+    "diffEnrich_deconv", "diffEnrich_deconv_tsv"
+]
+__version__ = _version.get_versions()["version"]
 
 from q2_autopepsirf.actions.diffEnrich import diffEnrich
 from q2_autopepsirf.actions.diffEnrich_tsv import diffEnrich_tsv
