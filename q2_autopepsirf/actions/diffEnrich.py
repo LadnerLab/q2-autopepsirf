@@ -222,13 +222,14 @@ def diffEnrich(
 
         # convert source file to metadata column to be used within the modules
         source_col = qiime2.Metadata.load(source).get_column("source")
-    
+
     elif user_defined_source:
         source_col = user_defined_source
 
     # run enrich module
     enrich_dir, = enrich(
         source=source_col,
+        flex_reps=flexible_reps_source,
         thresh_file=thresh_file,
         zscores=zscore_out,
         col_sum=col_sum,
@@ -290,6 +291,7 @@ def diffEnrich(
     zenrich_out, = zenrich(
         data=col_sum,
         zscores=zscore_out,
+        flex_reps=flexible_reps_source,
         negative_controls=negative_names,
         negative_id=negative_id,
         source=source_col,
@@ -308,4 +310,3 @@ def diffEnrich(
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
     )
-
