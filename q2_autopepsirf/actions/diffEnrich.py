@@ -4,11 +4,13 @@ from q2_pepsirf.format_types import(
     PepsirfInfoSumOfProbesFmt, PepsirfInfoSNPNFormat,
     PepsirfContingencyTSVFormat, ZscoreNanFormat, EnrichedPeptideDirFmt
 )
+from subprocess import run
 
 import csv
 import os
 import pandas as pd
 import qiime2
+
 
 # Name: diffenrich
 # Process: automatically runs through q2-ps-plot modules and q2-pepsirf modules
@@ -38,6 +40,7 @@ def diffEnrich(
         exact_cs_thresh="20",
         exact_zenrich_thresh=None,
         pepsirf_tsv_dir="./",
+        log_dir="./logs",
         tsv_base_str=None,
         step_z_thresh=5,
         upper_z_thresh=30,
@@ -304,6 +307,13 @@ def diffEnrich(
         pepsirf_binary=pepsirf_binary
     )
 
+    # will be wrapped in a utils function
+    # check for there is not a directory for logs already
+    if not os.path.isdir(log_dir):
+        os.mkdir(log_dir)
+    # collect log files
+    run((f"mv *.log ./{log_dir}").split(), shell=True, check=True)
+    
     # return all files created
     return (
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
