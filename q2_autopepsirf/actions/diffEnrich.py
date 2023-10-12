@@ -306,13 +306,6 @@ def diffEnrich(
         exact_cs_thresh=exact_cs_thresh,
         pepsirf_binary=pepsirf_binary
     )
-
-    # will be wrapped in a utils function
-    # check for there is not a directory for logs already
-    if not os.path.isdir(log_dir):
-        os.mkdir(log_dir)
-    # collect log files
-    run((f"mv *.log ./{log_dir}").split(), shell=True, check=True)
     
     # return all files created
     return (

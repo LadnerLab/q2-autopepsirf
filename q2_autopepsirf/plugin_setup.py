@@ -60,6 +60,7 @@ shared_parameters = {
     "upper_z_thresh": Int % Range(2, None),
     "lower_z_thresh": Int % Range(1, None),
     "pepsirf_tsv_dir": Str,
+    "pepsirf_logs_dir": Str,
     "tsv_base_str": Str,
     "hdi": Float % Range(0.0, 1.0),
     "infer_pairs_source": Bool,
@@ -96,6 +97,8 @@ shared_parameter_description = {
         " tsv-base-str for output of tsv verison of qza files. The"
         " source_samples file and png boxplot outputs will always be put"
         " within this directory.",
+    "pepsirf_logs_dir": "Path to a directory which PepSIRF log files will be"
+        " collected."
     "tsv_base_str": "The base name for the output tsv files excluding ay"
         " extensions, typcally the raw data filename (EX: --p-tsv-base-str"
         " raw_data). Must also provide pepsirf-tsv-dir, if pepsirf-tsv-dir"
@@ -273,4 +276,3 @@ plugin.pipelines.register_function(
         " that are used to determine enriched peptides and"
         " **ADD DECONV DESCRIPTION**"
 )
-
