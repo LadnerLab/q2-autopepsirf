@@ -1,11 +1,11 @@
 import os
-from subprocess import run
+import subprocess
 
 
 def collect_logs(path):
     # collect pepsirf logs into a directory at `path`
     # check for there is not a directory for logs already
-    if not os.path.isdir(log_dir):
-        os.mkdir(log_dir)
+    if not os.path.isdir(path):
+        os.mkdir(path)
     # collect log files
-    run((f"mv *.log ./{log_dir}").split(), shell=True, check=True)
+    subprocess.run((f"mv *.log ./{path}").split(), shell=True, check=True)

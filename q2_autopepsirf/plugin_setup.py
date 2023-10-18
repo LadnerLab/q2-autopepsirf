@@ -98,7 +98,7 @@ shared_parameter_description = {
         " source_samples file and png boxplot outputs will always be put"
         " within this directory.",
     "pepsirf_logs_dir": "Path to a directory which PepSIRF log files will be"
-        " collected."
+        " collected.",
     "tsv_base_str": "The base name for the output tsv files excluding ay"
         " extensions, typcally the raw data filename (EX: --p-tsv-base-str"
         " raw_data). Must also provide pepsirf-tsv-dir, if pepsirf-tsv-dir"

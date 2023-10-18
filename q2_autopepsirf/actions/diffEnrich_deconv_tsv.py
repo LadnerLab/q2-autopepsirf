@@ -27,6 +27,7 @@ def diffEnrich_deconv_tsv(
         exact_cs_thresh="20",
         exact_zenrich_thresh=None,
         pepsirf_tsv_dir="./",
+        pepsirf_logs_dir="./logs",
         tsv_base_str=None,
         step_z_thresh=5,
         upper_z_thresh=30,
