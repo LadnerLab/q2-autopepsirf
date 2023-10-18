@@ -8,4 +8,4 @@ def collect_logs(path):
     if not os.path.isdir(path):
         os.mkdir(path)
     # collect log files
-    subprocess.run((f"mv *.log ./{path}").split(), shell=True, check=True)
+    subprocess.run((f"mv *.log {path}").split(), shell=True, check=True)

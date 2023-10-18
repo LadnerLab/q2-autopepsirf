@@ -10,6 +10,7 @@ import csv
 import os
 import pandas as pd
 import qiime2
+from q2_autopepsirf.utils import collect_logs
 
 
 # Name: diffenrich
@@ -306,6 +307,8 @@ def diffEnrich(
         exact_cs_thresh=exact_cs_thresh,
         pepsirf_binary=pepsirf_binary
     )
+
+    collect_logs(pepsirf_logs_dir)
     
     # return all files created
     return (

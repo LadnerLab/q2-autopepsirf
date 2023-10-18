@@ -5,6 +5,7 @@ from q2_pepsirf.format_types import (
 )
 
 import os
+from q2_autopepsirf.utils import collect_logs
 
 def diffEnrich_deconv(
         ctx,
@@ -63,6 +64,7 @@ def diffEnrich_deconv(
         exact_cs_thresh=exact_cs_thresh,
         exact_zenrich_thresh=exact_zenrich_thresh,
         pepsirf_tsv_dir=pepsirf_tsv_dir,
+        pepsirf_logs_dir=pepsirf_logs_dir,
         tsv_base_str=tsv_base_str,
         step_z_thresh=step_z_thresh,
         upper_z_thresh=upper_z_thresh,
@@ -93,6 +95,8 @@ def diffEnrich_deconv(
         deconv_base = "%s_deconv_dir.tsv" % (tsv_base_str)
         deconv_tsv = dir_out.view(PepsirfDeconvBatchDirFmt)
         deconv_tsv.save(os.path.join(pepsirf_tsv_dir, deconv_base), ext=".tsv")    
+
+    collect_logs(pepsirf_logs_dir)
 
     return (
         dir_out, score_per_round, map_dir, col_sum, diff, diff_ratio, 

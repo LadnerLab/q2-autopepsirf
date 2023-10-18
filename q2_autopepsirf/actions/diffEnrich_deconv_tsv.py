@@ -115,6 +115,7 @@ def diffEnrich_deconv_tsv(
         exact_cs_thresh=exact_cs_thresh,
         exact_zenrich_thresh=exact_zenrich_thresh,
         pepsirf_tsv_dir=pepsirf_tsv_dir,
+        pepsirf_logs_dir=pepsirf_logs_dir,
         tsv_base_str=tsv_base_str,
         step_z_thresh=step_z_thresh,
         upper_z_thresh=upper_z_thresh,
