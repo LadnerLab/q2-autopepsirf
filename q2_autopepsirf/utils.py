@@ -10,6 +10,5 @@ def collect_logs(path):
         os.mkdir(path)
     # collect log files
     files = glob.glob("*.log", recursive=True)
-    print(f"Moving {files} into {path}")
     for file in files:
         shutil.move(file, path)
