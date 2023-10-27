@@ -1,5 +1,6 @@
 import os
-import subprocess
+import glob
+import shutil
 
 
 def collect_logs(path):
@@ -8,4 +9,7 @@ def collect_logs(path):
     if not os.path.isdir(path):
         os.mkdir(path)
     # collect log files
-    subprocess.run((f"mv *.log {path}").split(), shell=False, check=True)
+    files = glob.glob("*.log", recursive=True)
+    print(f"Moving {files} into {path}")
+    for file in files:
+        shutil.move(file, path)
