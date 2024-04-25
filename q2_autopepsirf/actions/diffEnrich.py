@@ -28,6 +28,7 @@ def diffEnrich(
         bins,
         infer_pairs_source=True,
         flexible_reps_source=False,
+        precision=2,
         s_enrich_source=False,
         user_defined_source = None,
         negative_control=None,
@@ -74,7 +75,7 @@ def diffEnrich(
         negative_control=None,
         negative_id=None,
         negative_names=None,
-        precision=2,
+        precision=precision,
         outfile=os.path.join(pepsirf_tsv_dir, "norm.out"),
         pepsirf_binary=pepsirf_binary
     )
@@ -104,7 +105,7 @@ def diffEnrich(
         negative_control=negative_control,
         negative_id=negative_id,
         negative_names=negative_names,
-        precision=2,
+        precision=precision,
         outfile=os.path.join(pepsirf_tsv_dir, "norm.out"),
         pepsirf_binary=pepsirf_binary
     )
@@ -122,7 +123,7 @@ def diffEnrich(
         negative_control=negative_control,
         negative_id=negative_id,
         negative_names=negative_names,
-        precision=2,
+        precision=precision,
         outfile=os.path.join(pepsirf_tsv_dir, "norm.out"),
         pepsirf_binary=pepsirf_binary
     )

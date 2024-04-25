@@ -64,6 +64,7 @@ shared_parameters = {
     "hdi": Float % Range(0.0, 1.0),
     "infer_pairs_source": Bool,
     "flexible_reps_source": Bool,
+    "precision": Int % Range(0, None),
     "s_enrich_source": Bool,
     "user_defined_source": MetadataColumn[Categorical]
 }
@@ -118,6 +119,8 @@ shared_parameter_description = {
         " a single replicate, some may have 2, 3, 4 etc. And all replicates of"
         " a given sample will be considered for determining enriched"
         " peptides.",
+    "precision": "Output score precision. The scores written to the output"
+            " will be output to this many decimal places.",
     "s_enrich_source": "All samples will be processed individually as samples"
         " with only one replicate",
     "user_defined_source": "Metadata file containing all sample names and"
