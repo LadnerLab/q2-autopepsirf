@@ -56,6 +56,12 @@ def diffEnrich(
         if not tsv_base_str:
             tsv_base_str = "aps-output"
 
+    # if user input somthing for negative names, turn into list
+    if negative_names:
+        negative_names = negative_names.split(' ')
+    else:
+        negative_names = None
+
     # collect the actions from ps-plot and q2-pepsirf to be executed
     norm = ctx.get_action("pepsirf", "norm")
     zscore = ctx.get_action("pepsirf", "zscore")
@@ -91,7 +97,7 @@ def diffEnrich(
     # create list for collection of sample names
     if not negative_names and not negative_id:
         if not negative_control:
-            negative_names = []
+            negative_names = None
         else:
             negDF = negative_control.view(pd.DataFrame)
             negative_names = list(negDF.index)
