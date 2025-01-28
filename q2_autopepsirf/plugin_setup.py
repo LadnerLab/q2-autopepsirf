@@ -300,10 +300,8 @@ plugin.pipelines.register_function(
 # shared outputs for redoDemux and redoDemux tsv pipeline
 shared_outputs = [
     ("filtered_counts_output", FeatureTable[RawCounts]),
-    ("bad_output_col_sum", Visualization), 
-    ("good_output_col_sum", Visualization),
-    ("bad_output_zscores", Visualization), 
-    ("good_output_zscores", Visualization)
+    ("bad_output_filtered_counts", Visualization), 
+    ("good_output_filtered_counts", Visualization)
 ]
 
 # shared paremters for redoDemux and redoDemux tsv pipeline

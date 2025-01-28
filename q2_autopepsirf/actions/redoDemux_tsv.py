@@ -135,8 +135,7 @@ def redoDemux_tsv(
     # run redoDemux
     (raw_counts, diagnostic_data,
         filtered_counts, 
-        bad_correlation_vis_col_sum, good_correlation_vis_col_sum,
-        bad_correlation_vis_zscores, good_correlation_vis_zscores,
+        bad_correlation_vis_filtered_counts, good_correlation_vis_filtered_counts,
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
@@ -189,8 +188,7 @@ def redoDemux_tsv(
 
     return (raw_counts, diagnostic_data,
         filtered_counts, 
-        bad_correlation_vis_col_sum, good_correlation_vis_col_sum,
-        bad_correlation_vis_zscores, good_correlation_vis_zscores,
+        bad_correlation_vis_filtered_counts, good_correlation_vis_filtered_counts,
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
