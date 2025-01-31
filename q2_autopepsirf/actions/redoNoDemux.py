@@ -110,7 +110,7 @@ def redoNoDemux(
     read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, 
     zscore_scatter, colsum_scatter, zenrich_out
     ) = diffEnrich(
-        raw_data=filtered_counts_by_thresh,
+        raw_data=filtered_counts,
         bins=bins,
         infer_pairs_source=infer_pairs_source,
         flexible_reps_source=flexible_reps_source,
