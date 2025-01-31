@@ -94,7 +94,6 @@ def redoNoDemux(
     
         # filter raw counts based on good zscore correlatons
         good_samples = pd.read_csv("good_corr_zscores.tsv", sep="\t", index_col=0).columns.to_list()
-        print(good_samples)
         filtered_counts_by_thresh_filepath = os.path.join(temp_dir, "zscore_matrix.tsv")
         filtered_counts_by_thresh.view(PepsirfContingencyTSVFormat).save(filtered_counts_by_thresh_filepath, ext=".tsv")
         filtered_counts_df = pd.read_csv(filtered_counts_by_thresh_filepath, sep="\t", index_col=0)
