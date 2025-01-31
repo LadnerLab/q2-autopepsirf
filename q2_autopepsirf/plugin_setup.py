@@ -300,8 +300,6 @@ plugin.pipelines.register_function(
 # shared outputs for redoDemux and redoDemux tsv pipeline
 shared_outputs = [
     ("filtered_counts_output", FeatureTable[RawCounts]),
-    ("bad_output_col_sum", Visualization), 
-    ("good_output_col_sum", Visualization),
     ("bad_output_zscores", Visualization), 
     ("good_output_zscores", Visualization)
 ]
@@ -313,7 +311,8 @@ shared_parameters = {
     "drop_samp_out": Str,
     "pairs_file": Str,
     "log_normalization": Bool,
-    "correlation_threshold": Float
+    "correlation_threshold": Float,
+    "filtered_pepsirf_tsv_dir": Str,
 }
 
 # shared parameter descriptions for redoDemux and redoDemux tsv pipeline
@@ -329,7 +328,12 @@ shared_parameter_description = {
             " scores before running a correlation test on them.",
     "correlation_threshold": "Set a threshold value; anything below the"
         " value will be considered a bad correlation score, and anything"
-        " above will be considered a good correlation score."
+        " above will be considered a good correlation score.",
+    "filtered_pepsirf_tsv_dir": "pepsirf_tsv_dir for filtered run of diffEnrich"
+        " Provide a directory path. Must also provide"
+        " tsv-base-str for output of tsv verison of qza files. The"
+        " source_samples file and png boxplot outputs will always be put"
+        " within this directory.",
 }
 
 # shared paremters for redoDemux and redoDemux tsv pipeline
