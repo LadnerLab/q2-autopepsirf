@@ -75,8 +75,7 @@ def redoNoDemux_tsv(
         thresh_file = None
 
     (
-        filtered_counts, 
-        bad_correlation_vis_col_sum, good_correlation_vis_col_sum,
+        filtered_counts,
         bad_correlation_vis_zscores, good_correlation_vis_zscores,
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
