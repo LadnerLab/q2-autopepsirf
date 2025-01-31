@@ -57,7 +57,7 @@ diffEnrich_shared_outputs = [
 # shared paremters for diffEnrich and diffEnrich tsv pipeline
 diffEnrich_shared_parameters = {
     "negative_id": Str,
-    "negative_names": Str,
+    "negative_names": List[Str],
     "pepsirf_binary": Str,
     "exact_z_thresh": Str,
     "exact_cs_thresh": Str,
