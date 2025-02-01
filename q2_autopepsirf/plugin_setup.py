@@ -54,6 +54,14 @@ diffEnrich_shared_outputs = [
     ("zenrich_scatter", Visualization)
 ]
 
+diffEnrich_good_outputs = [
+    ("filtered_counts_good", FeatureTable[RawCounts]),
+    ("col_sum_good", FeatureTable[Normed]),
+    ("diff_good", FeatureTable[NormedDifference]),
+    ("diff_ratio_good", FeatureTable[NormedDiffRatio]),
+    ("zscore_good", FeatureTable[Zscore])
+]
+
 # shared paremters for diffEnrich and diffEnrich tsv pipeline
 diffEnrich_shared_parameters = {
     "negative_id": Str,
@@ -312,7 +320,7 @@ shared_parameters = {
     "pairs_file": Str,
     "log_normalization": Bool,
     "correlation_threshold": Float,
-    "filtered_pepsirf_tsv_dir": Str,
+    "filtered_good_tsv_dir": Str
 }
 
 # shared parameter descriptions for redoDemux and redoDemux tsv pipeline
@@ -329,11 +337,7 @@ shared_parameter_description = {
     "correlation_threshold": "Set a threshold value; anything below the"
         " value will be considered a bad correlation score, and anything"
         " above will be considered a good correlation score.",
-    "filtered_pepsirf_tsv_dir": "pepsirf_tsv_dir for filtered run of diffEnrich"
-        " Provide a directory path. Must also provide"
-        " tsv-base-str for output of tsv verison of qza files. The"
-        " source_samples file and png boxplot outputs will always be put"
-        " within this directory.",
+    "filtered_good_tsv_dir": "Directory where filtered good matrix files are output to."
 }
 
 # shared paremters for redoDemux and redoDemux tsv pipeline
@@ -419,6 +423,7 @@ plugin.pipelines.register_function(
         ("raw_counts_output", FeatureTable[RawCounts]),
         ("diagnostic_output", DemuxDiagnostic),
         *shared_outputs,
+        *diffEnrich_good_outputs,
         *diffEnrich_shared_outputs
     ],
     parameters={
@@ -485,6 +490,7 @@ plugin.pipelines.register_function(
         ("raw_counts_output", FeatureTable[RawCounts]),
         ("diagnostic_output", DemuxDiagnostic),
         *shared_outputs,
+        *diffEnrich_good_outputs,
         *diffEnrich_shared_outputs
     ],
     parameters={
@@ -558,6 +564,7 @@ plugin.pipelines.register_function(
     },
     outputs=[
         *shared_outputs,
+        *diffEnrich_good_outputs,
         *diffEnrich_shared_outputs
     ],
     parameters={
@@ -583,6 +590,7 @@ plugin.pipelines.register_function(
     inputs={},
     outputs=[
         *shared_outputs,
+        *diffEnrich_good_outputs,
         *diffEnrich_shared_outputs
     ],
     parameters={

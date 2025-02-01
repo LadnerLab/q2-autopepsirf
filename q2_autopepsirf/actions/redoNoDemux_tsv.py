@@ -24,7 +24,6 @@ def redoNoDemux_tsv(
     exact_cs_thresh="20",
     exact_zenrich_thresh=None,
     pepsirf_tsv_dir="./pepsirf_tsv",
-    filtered_pepsirf_tsv_dir="./filtered_pepsirf_tsv",
     tsv_base_str=None,
     step_z_thresh=5,
     upper_z_thresh=30,
@@ -33,7 +32,8 @@ def redoNoDemux_tsv(
     hdi=0.95,
     log_normalization=False,
     correlation_threshold=0.8,
-    pepsirf_binary="pepsirf"
+    pepsirf_binary="pepsirf",
+    filtered_good_tsv_dir ="./filtered_good_tsv"
     ):
     
     redoNoDemux = ctx.get_action("autopepsirf", "redoNoDemux")
@@ -77,6 +77,7 @@ def redoNoDemux_tsv(
     (
         filtered_counts,
         bad_correlation_vis_zscores, good_correlation_vis_zscores,
+        filtered_counts_good, col_sum_good, diff_good, diff_ratio_good, zscore_out_good,
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
@@ -99,7 +100,6 @@ def redoNoDemux_tsv(
             exact_cs_thresh=exact_cs_thresh,
             exact_zenrich_thresh=exact_zenrich_thresh,
             pepsirf_tsv_dir=pepsirf_tsv_dir,
-            filtered_pepsirf_tsv_dir=filtered_pepsirf_tsv_dir,
             tsv_base_str=tsv_base_str,
             step_z_thresh=step_z_thresh,
             upper_z_thresh=upper_z_thresh,
@@ -108,12 +108,14 @@ def redoNoDemux_tsv(
             hdi=hdi,
             log_normalization=log_normalization,
             correlation_threshold=correlation_threshold,
-            pepsirf_binary=pepsirf_binary
+            pepsirf_binary=pepsirf_binary,
+            filtered_good_tsv_dir=filtered_good_tsv_dir
         )
 
     return (
         filtered_counts,
         bad_correlation_vis_zscores, good_correlation_vis_zscores,
+        filtered_counts_good, col_sum_good, diff_good, diff_ratio_good, zscore_out_good,
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
