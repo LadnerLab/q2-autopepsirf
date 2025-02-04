@@ -50,6 +50,7 @@ def redoDemux_tsv(
     raw_constraint=300000,
     hdi=0.95,
     log_normalization=False,
+    reused_samples_in_pairs=True,
     correlation_threshold=0.8,
     pepsirf_binary="pepsirf",
     filtered_good_tsv_dir ="./filtered_good_tsv"
@@ -183,6 +184,7 @@ def redoDemux_tsv(
             raw_constraint=raw_constraint,
             hdi=hdi,
             log_normalization=log_normalization,
+            reused_samples_in_pairs=reused_samples_in_pairs,
             correlation_threshold=correlation_threshold,
             pepsirf_binary=pepsirf_binary,
             filtered_good_tsv_dir=filtered_good_tsv_dir

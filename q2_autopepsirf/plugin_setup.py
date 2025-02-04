@@ -319,6 +319,7 @@ shared_parameters = {
     "drop_samp_out": Str,
     "pairs_file": Str,
     "log_normalization": Bool,
+    "reused_samples_in_pairs": Bool,
     "correlation_threshold": Float,
     "filtered_good_tsv_dir": Str
 }
@@ -334,6 +335,10 @@ shared_parameter_description = {
             " sample names. Include if samples are longitudinal.",
     "log_normalization": "Run a log normalization on each of the sets of"
             " scores before running a correlation test on them.",
+    "reused_samples_in_pairs": "Sample pairs include duplicate samples"
+        " (i.e. a single sample exists in more that one pairs). Turning"
+        " this on changes the second pair entry to be searched through"
+        " the entire array.",
     "correlation_threshold": "Set a threshold value; anything below the"
         " value will be considered a bad correlation score, and anything"
         " above will be considered a good correlation score.",
