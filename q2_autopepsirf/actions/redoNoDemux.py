@@ -94,14 +94,14 @@ def redoNoDemux(
                 log_normalization=log_normalization,
                 reused_samples_in_pairs=reused_samples_in_pairs,
                 correlation_threshold=correlation_threshold,
-                bad_corr_out=os.path.join(filtered_good_tsv_dir, "bad_corr_zscores.tsv"),
-                good_corr_out=os.path.join(filtered_good_tsv_dir, "good_corr_zscores.tsv"),
-                bad_pairs_out=os.path.join(filtered_good_tsv_dir, "bad_pairs.tsv"),
-                good_pairs_out=os.path.join(filtered_good_tsv_dir, "good_pairs.tsv")
+                bad_corr_out="bad_corr_zscores.tsv",
+                good_corr_out="good_corr_zscores.tsv",
+                bad_pairs_out="bad_pairs.tsv",
+                good_pairs_out="good_pairs.tsv"
         )
     
         # filter raw counts based on good zscore correlatons
-        good_samples = pd.read_csv(os.path.join(filtered_good_tsv_dir, "good_corr_zscores.tsv"), sep="\t", index_col=0).columns.to_list()
+        good_samples = pd.read_csv("good_corr_zscores.tsv", sep="\t", index_col=0).columns.to_list()
 
     filtered_counts_good = filter_matrix(ctx, filtered_counts, good_samples, "FeatureTable[RawCounts]", filtered_good_tsv_dir, "filtered_counts_good.tsv")
     col_sum_good = filter_matrix(ctx, col_sum, good_samples, "FeatureTable[Normed]", filtered_good_tsv_dir, "col_sum_good.tsv")
