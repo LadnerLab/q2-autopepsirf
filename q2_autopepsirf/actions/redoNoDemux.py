@@ -96,18 +96,18 @@ def redoNoDemux(
                 correlation_threshold=correlation_threshold,
                 bad_corr_out="bad_corr_zscores.tsv",
                 good_corr_out="good_corr_zscores.tsv",
-                bad_pairs_out="bad_pairs.tsv",
-                good_pairs_out="good_pairs.tsv"
+                bad_pairs_out="pairs_bad.tsv",
+                good_pairs_out="pairs_good.tsv"
         )
     
         # filter raw counts based on good zscore correlatons
         good_samples = pd.read_csv("good_corr_zscores.tsv", sep="\t", index_col=0).columns.to_list()
 
     filtered_counts_good = filter_matrix(ctx, filtered_counts, good_samples, "FeatureTable[RawCounts]", filtered_good_tsv_dir, "filtered_counts_good.tsv")
-    col_sum_good = filter_matrix(ctx, col_sum, good_samples, "FeatureTable[Normed]", filtered_good_tsv_dir, "col_sum_good.tsv")
-    diff_good = filter_matrix(ctx, diff, good_samples, "FeatureTable[NormedDifference]", filtered_good_tsv_dir, "diff_good.tsv")
-    diff_ratio_good = filter_matrix(ctx, diff_ratio, good_samples, "FeatureTable[NormedDiffRatio]", filtered_good_tsv_dir, "diff_ratio_good.tsv")
-    zscore_out_good = filter_matrix(ctx, zscore_out, good_samples, "FeatureTable[Zscore]", filtered_good_tsv_dir, "zscore_out_good.tsv")
+    col_sum_good = filter_matrix(ctx, col_sum, good_samples, "FeatureTable[Normed]", filtered_good_tsv_dir, f"{tsv_base_str}_CS_good.tsv")
+    diff_good = filter_matrix(ctx, diff, good_samples, "FeatureTable[NormedDifference]", filtered_good_tsv_dir, f"{tsv_base_str}_SBD_good.tsv")
+    diff_ratio_good = filter_matrix(ctx, diff_ratio, good_samples, "FeatureTable[NormedDiffRatio]", filtered_good_tsv_dir, f"{tsv_base_str}_SBDR_good.tsv")
+    zscore_out_good = filter_matrix(ctx, zscore_out, good_samples, "FeatureTable[Zscore]", filtered_good_tsv_dir, f"{tsv_base_str}_Z-HDI_good.tsv")
         
 
 
