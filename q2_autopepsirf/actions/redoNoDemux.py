@@ -103,7 +103,7 @@ def redoNoDemux(
         # filter raw counts based on good zscore correlatons
         good_samples = pd.read_csv("good_corr_zscores.tsv", sep="\t", index_col=0).columns.to_list()
 
-    filtered_counts_good = filter_matrix(ctx, filtered_counts, good_samples, "FeatureTable[RawCounts]", filtered_good_tsv_dir, "filtered_counts_good.tsv")
+    filtered_counts_good = filter_matrix(ctx, filtered_counts, good_samples, "FeatureTable[RawCounts]", filtered_good_tsv_dir,  f"{tsv_base_str}_good.tsv")
     col_sum_good = filter_matrix(ctx, col_sum, good_samples, "FeatureTable[Normed]", filtered_good_tsv_dir, f"{tsv_base_str}_CS_good.tsv")
     diff_good = filter_matrix(ctx, diff, good_samples, "FeatureTable[NormedDifference]", filtered_good_tsv_dir, f"{tsv_base_str}_SBD_good.tsv")
     diff_ratio_good = filter_matrix(ctx, diff_ratio, good_samples, "FeatureTable[NormedDiffRatio]", filtered_good_tsv_dir, f"{tsv_base_str}_SBDR_good.tsv")
