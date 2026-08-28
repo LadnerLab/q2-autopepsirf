@@ -22,7 +22,7 @@ import qiime2
 # Dependencies:
 # (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich),
 # (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
-def diffEnrich_tsv(
+def _diffEnrich_tsv(
         ctx,
         raw_data_filepath,
         bins_filepath,
@@ -44,10 +44,14 @@ def diffEnrich_tsv(
         lower_z_thresh=5,
         raw_constraint=300000,
         hdi=0.95,
-        pepsirf_binary="pepsirf"):
+        pepsirf_binary="pepsirf",
+        create_visualizations=True):
 
     # collect diffEnrich action
-    diffEnrich = ctx.get_action("autopepsirf", "diffEnrich")
+    action_name = "diffEnrich"
+    if not create_visualizations:
+        action_name = "diffEnrich_no_viz"
+    diffEnrich = ctx.get_action("autopepsirf", action_name)
 
     # import raw data into an artifact
     raw_data = ctx.make_artifact(
@@ -85,11 +89,7 @@ def diffEnrich_tsv(
     else:
         thresh_file = None
 
-    # run the diffEnrich module with all the inputs/parameters given
-    (col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names, read_counts,
-     rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter,
-     colsum_scatter, zenrich_out
-     ) = diffEnrich(
+    diff_enrich_out = diffEnrich(
         raw_data=raw_data,
         bins=bins,
         infer_pairs_source=infer_pairs_source,
@@ -113,6 +113,20 @@ def diffEnrich_tsv(
         pepsirf_binary=pepsirf_binary 
     )
 
+    if not create_visualizations:
+        (col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+         read_counts, enrich_dir) = diff_enrich_out
+        return (
+            col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+            read_counts, enrich_dir
+        )
+
+    # run the diffEnrich module with all the inputs/parameters given
+    (col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names, read_counts,
+     rc_boxplot_out, enrich_dir, enrichedCountsBoxplot, zscore_scatter,
+     colsum_scatter, zenrich_out
+     ) = diff_enrich_out
+
     # return all the qza and qzv files
     return (
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
@@ -120,3 +134,102 @@ def diffEnrich_tsv(
         zscore_scatter, colsum_scatter, zenrich_out
     )
 
+
+def diffEnrich_tsv(
+        ctx,
+        raw_data_filepath,
+        bins_filepath,
+        infer_pairs_source=True,
+        flexible_reps_source=False,
+        s_enrich_source=False,
+        user_defined_source=None,
+        negative_control_filepath=None,
+        negative_id=None,
+        negative_names=None,
+        thresh_file_filepath=None,
+        exact_z_thresh=None,
+        exact_cs_thresh="20",
+        exact_zenrich_thresh=None,
+        pepsirf_tsv_dir="./",
+        tsv_base_str=None,
+        step_z_thresh=5,
+        upper_z_thresh=30,
+        lower_z_thresh=5,
+        raw_constraint=300000,
+        hdi=0.95,
+        pepsirf_binary="pepsirf"):
+    return _diffEnrich_tsv(
+        ctx,
+        raw_data_filepath,
+        bins_filepath,
+        infer_pairs_source=infer_pairs_source,
+        flexible_reps_source=flexible_reps_source,
+        s_enrich_source=s_enrich_source,
+        user_defined_source=user_defined_source,
+        negative_control_filepath=negative_control_filepath,
+        negative_id=negative_id,
+        negative_names=negative_names,
+        thresh_file_filepath=thresh_file_filepath,
+        exact_z_thresh=exact_z_thresh,
+        exact_cs_thresh=exact_cs_thresh,
+        exact_zenrich_thresh=exact_zenrich_thresh,
+        pepsirf_tsv_dir=pepsirf_tsv_dir,
+        tsv_base_str=tsv_base_str,
+        step_z_thresh=step_z_thresh,
+        upper_z_thresh=upper_z_thresh,
+        lower_z_thresh=lower_z_thresh,
+        raw_constraint=raw_constraint,
+        hdi=hdi,
+        pepsirf_binary=pepsirf_binary,
+        create_visualizations=True
+    )
+
+
+def diffEnrich_tsv_no_viz(
+        ctx,
+        raw_data_filepath,
+        bins_filepath,
+        infer_pairs_source=True,
+        flexible_reps_source=False,
+        s_enrich_source=False,
+        user_defined_source=None,
+        negative_control_filepath=None,
+        negative_id=None,
+        negative_names=None,
+        thresh_file_filepath=None,
+        exact_z_thresh=None,
+        exact_cs_thresh="20",
+        exact_zenrich_thresh=None,
+        pepsirf_tsv_dir="./",
+        tsv_base_str=None,
+        step_z_thresh=5,
+        upper_z_thresh=30,
+        lower_z_thresh=5,
+        raw_constraint=300000,
+        hdi=0.95,
+        pepsirf_binary="pepsirf"):
+    return _diffEnrich_tsv(
+        ctx,
+        raw_data_filepath,
+        bins_filepath,
+        infer_pairs_source=infer_pairs_source,
+        flexible_reps_source=flexible_reps_source,
+        s_enrich_source=s_enrich_source,
+        user_defined_source=user_defined_source,
+        negative_control_filepath=negative_control_filepath,
+        negative_id=negative_id,
+        negative_names=negative_names,
+        thresh_file_filepath=thresh_file_filepath,
+        exact_z_thresh=exact_z_thresh,
+        exact_cs_thresh=exact_cs_thresh,
+        exact_zenrich_thresh=exact_zenrich_thresh,
+        pepsirf_tsv_dir=pepsirf_tsv_dir,
+        tsv_base_str=tsv_base_str,
+        step_z_thresh=step_z_thresh,
+        upper_z_thresh=upper_z_thresh,
+        lower_z_thresh=lower_z_thresh,
+        raw_constraint=raw_constraint,
+        hdi=hdi,
+        pepsirf_binary=pepsirf_binary,
+        create_visualizations=False
+    )

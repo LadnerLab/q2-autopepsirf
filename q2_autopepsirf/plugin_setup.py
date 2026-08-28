@@ -1,5 +1,7 @@
-from q2_autopepsirf.actions.diffEnrich import diffEnrich
-from q2_autopepsirf.actions.diffEnrich_tsv import diffEnrich_tsv
+from q2_autopepsirf.actions.diffEnrich import diffEnrich, diffEnrich_no_viz
+from q2_autopepsirf.actions.diffEnrich_tsv import (
+    diffEnrich_tsv, diffEnrich_tsv_no_viz
+)
 from q2_autopepsirf.actions.diffEnrich_deconv import diffEnrich_deconv
 from q2_autopepsirf.actions.diffEnrich_deconv_tsv import diffEnrich_deconv_tsv
 from q2_types.feature_table import FeatureTable
@@ -45,6 +47,17 @@ shared_outputs = [
     ("zscore_scatter", Visualization),
     ("colsum_scatter", Visualization),
     ("zenrich_scatter", Visualization)
+]
+
+shared_outputs_no_viz = [
+    ("col_sum", FeatureTable[Normed]),
+    ("diff", FeatureTable[NormedDifference]),
+    ("diff_ratio", FeatureTable[NormedDiffRatio]),
+    ("zscore", FeatureTable[Zscore]),
+    ("zscore_nan", ZscoreNan),
+    ("sample_names", InfoSNPN),
+    ("read_counts", InfoSumOfProbes),
+    ("enrich", PairwiseEnrichment)
 ]
 
 # shared paremters for diffEnrich and diffEnrich tsv pipeline
@@ -154,6 +167,36 @@ plugin.pipelines.register_function(
         " that are used to determine enriched peptides."
 )
 
+# action set up for diffEnrich module without visualization outputs
+plugin.pipelines.register_function(
+    function=diffEnrich_no_viz,
+    inputs={
+        "raw_data": FeatureTable[RawCounts],
+        "negative_control": FeatureTable[Normed],
+        "bins": PeptideBins,
+        "thresh_file": EnrichThresh
+    },
+    outputs=shared_outputs_no_viz,
+    parameters=shared_parameters,
+    input_descriptions={
+        "raw_data": "Raw data matrix.",
+        "negative_control": "Name of FeatureTable matrix file containing data"
+            " for sb samples.",
+        "bins": "Name of the file containing bins, one bin per line, as output"
+            " by the bin module. Each bin contains a tab-delimited list of"
+            " peptide names.",
+        "thresh_file": "The name of a tab-delimited file containing one"
+            " tab-delimited matrix filename and threshold(s), one per line. If"
+            " providing more than z score matrix."
+    },
+    output_descriptions=None,
+    parameter_descriptions=shared_parameter_description,
+    name="diffEnrich Pepsirf Pipeline Without Visualizations",
+    description="Uses the diff normaization from pepsirf to generate Z scores"
+        " that are used to determine enriched peptides, without producing"
+        " qzv visualization outputs."
+)
+
 # action set up for diffEnrich tsv pipeline
 plugin.pipelines.register_function(
     function=diffEnrich_tsv,
@@ -183,6 +226,38 @@ plugin.pipelines.register_function(
     name="diffEnrich tsv Pepsirf Pipeline",
     description="Uses the diff normaization from pepsirf to generate Z scores"
         " that are used to determine enriched peptides."
+)
+
+# action set up for diffEnrich tsv pipeline without visualization outputs
+plugin.pipelines.register_function(
+    function=diffEnrich_tsv_no_viz,
+    inputs={},
+    outputs=shared_outputs_no_viz,
+    parameters={
+        "raw_data_filepath": Str,
+        "negative_control_filepath": Str,
+        "bins_filepath": Str,
+        "thresh_file_filepath": Str,
+        **shared_parameters
+    },
+    input_descriptions=None,
+    output_descriptions=None,
+    parameter_descriptions={
+        "raw_data_filepath": "Raw data matrix in .tsv format.",
+        "negative_control_filepath": "Name of .tsv matrix file containing data"
+            " for sb samples.",
+        "bins_filepath": "Name of the file containing bins, one bin per line,"
+            " as output by the bin module. Each bin contains a tab-delimited"
+            " list of peptide names.",
+        "thresh_file_filepath": "The name of a tab-delimited file containing"
+            " one tab-delimited matrix filename and threshold(s), one per"
+            " line. If providing more than z score matrix.",
+        **shared_parameter_description
+    },
+    name="diffEnrich tsv Pepsirf Pipeline Without Visualizations",
+    description="Uses the diff normaization from pepsirf to generate Z scores"
+        " that are used to determine enriched peptides, without producing"
+        " qzv visualization outputs."
 )
 
 plugin.pipelines.register_function(

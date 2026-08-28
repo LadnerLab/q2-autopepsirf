@@ -22,7 +22,7 @@ import qiime2
 # Dependencies:
 # (ps-plot: raedCountsBoxplot, enrichmentRCBoxplot, repScatters, zenrich),
 # (pepsirf: norm, zscore, infoSNPN, infoSumOfProbes, enrich)
-def diffEnrich(
+def _diffEnrich(
         ctx,
         raw_data,
         bins,
@@ -44,7 +44,8 @@ def diffEnrich(
         lower_z_thresh=5,
         raw_constraint=300000,
         hdi=0.95,
-        pepsirf_binary="pepsirf"):
+        pepsirf_binary="pepsirf",
+        create_visualizations=True):
 
     # if pepsirf_tsv_dir provided, make sure the provided dir is not a already
     # created dir otherwise, make it a dir
@@ -62,10 +63,11 @@ def diffEnrich(
     infoSNPN = ctx.get_action("pepsirf", "infoSNPN")
     enrich = ctx.get_action("pepsirf", "enrich")
     infoSOP = ctx.get_action("pepsirf", "infoSumOfProbes")
-    RCBoxplot = ctx.get_action("ps-plot", "readCountsBoxplot")
-    enrichBoxplot = ctx.get_action("ps-plot", "enrichmentRCBoxplot")
-    repScatter = ctx.get_action("ps-plot", "repScatters")
-    zenrich = ctx.get_action("ps-plot", "zenrich")
+    if create_visualizations:
+        RCBoxplot = ctx.get_action("ps-plot", "readCountsBoxplot")
+        enrichBoxplot = ctx.get_action("ps-plot", "enrichmentRCBoxplot")
+        repScatter = ctx.get_action("ps-plot", "repScatters")
+        zenrich = ctx.get_action("ps-plot", "zenrich")
 
     # run norm module to recieved col-sum
     col_sum, = norm(
@@ -179,10 +181,11 @@ def diffEnrich(
         rc_tsv = read_counts.view(PepsirfInfoSumOfProbesFmt)
         rc_tsv.save(os.path.join(pepsirf_tsv_dir, rc_base), ext=".tsv")
 
-    # run readCounts boxplot module to recieve visualization
-    rc_boxplot_out, = RCBoxplot(
-        read_counts=read_counts, png_out_dir=pepsirf_tsv_dir
-    )
+    if create_visualizations:
+        # run readCounts boxplot module to recieve visualization
+        rc_boxplot_out, = RCBoxplot(
+            read_counts=read_counts, png_out_dir=pepsirf_tsv_dir
+        )
 
     # create variables for source file creation
     if infer_pairs_source or flexible_reps_source or s_enrich_source:
@@ -268,6 +271,12 @@ def diffEnrich(
         enrich_tsv = enrich_dir.view(EnrichedPeptideDirFmt)
         enrich_tsv.save(os.path.join(pepsirf_tsv_dir, enrich_base))
 
+    if not create_visualizations:
+        return (
+            col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
+            read_counts, enrich_dir
+        )
+
     # run enrichment boxplot module to recieve visualization
     enrichedCountsBoxplot, = enrichBoxplot(
         enriched_dir=enrich_dir, png_out_dir=pepsirf_tsv_dir
@@ -309,4 +318,104 @@ def diffEnrich(
         col_sum, diff, diff_ratio, zscore_out, nan_out, sample_names,
         read_counts, rc_boxplot_out, enrich_dir, enrichedCountsBoxplot,
         zscore_scatter, colsum_scatter, zenrich_out
+    )
+
+
+def diffEnrich(
+        ctx,
+        raw_data,
+        bins,
+        infer_pairs_source=True,
+        flexible_reps_source=False,
+        s_enrich_source=False,
+        user_defined_source = None,
+        negative_control=None,
+        negative_id=None,
+        negative_names=None,
+        thresh_file=None,
+        exact_z_thresh=None,
+        exact_cs_thresh="20",
+        exact_zenrich_thresh=None,
+        pepsirf_tsv_dir="./",
+        tsv_base_str=None,
+        step_z_thresh=5,
+        upper_z_thresh=30,
+        lower_z_thresh=5,
+        raw_constraint=300000,
+        hdi=0.95,
+        pepsirf_binary="pepsirf"):
+    return _diffEnrich(
+        ctx,
+        raw_data,
+        bins,
+        infer_pairs_source=infer_pairs_source,
+        flexible_reps_source=flexible_reps_source,
+        s_enrich_source=s_enrich_source,
+        user_defined_source=user_defined_source,
+        negative_control=negative_control,
+        negative_id=negative_id,
+        negative_names=negative_names,
+        thresh_file=thresh_file,
+        exact_z_thresh=exact_z_thresh,
+        exact_cs_thresh=exact_cs_thresh,
+        exact_zenrich_thresh=exact_zenrich_thresh,
+        pepsirf_tsv_dir=pepsirf_tsv_dir,
+        tsv_base_str=tsv_base_str,
+        step_z_thresh=step_z_thresh,
+        upper_z_thresh=upper_z_thresh,
+        lower_z_thresh=lower_z_thresh,
+        raw_constraint=raw_constraint,
+        hdi=hdi,
+        pepsirf_binary=pepsirf_binary,
+        create_visualizations=True
+    )
+
+
+def diffEnrich_no_viz(
+        ctx,
+        raw_data,
+        bins,
+        infer_pairs_source=True,
+        flexible_reps_source=False,
+        s_enrich_source=False,
+        user_defined_source = None,
+        negative_control=None,
+        negative_id=None,
+        negative_names=None,
+        thresh_file=None,
+        exact_z_thresh=None,
+        exact_cs_thresh="20",
+        exact_zenrich_thresh=None,
+        pepsirf_tsv_dir="./",
+        tsv_base_str=None,
+        step_z_thresh=5,
+        upper_z_thresh=30,
+        lower_z_thresh=5,
+        raw_constraint=300000,
+        hdi=0.95,
+        pepsirf_binary="pepsirf"):
+    return _diffEnrich(
+        ctx,
+        raw_data,
+        bins,
+        infer_pairs_source=infer_pairs_source,
+        flexible_reps_source=flexible_reps_source,
+        s_enrich_source=s_enrich_source,
+        user_defined_source=user_defined_source,
+        negative_control=negative_control,
+        negative_id=negative_id,
+        negative_names=negative_names,
+        thresh_file=thresh_file,
+        exact_z_thresh=exact_z_thresh,
+        exact_cs_thresh=exact_cs_thresh,
+        exact_zenrich_thresh=exact_zenrich_thresh,
+        pepsirf_tsv_dir=pepsirf_tsv_dir,
+        tsv_base_str=tsv_base_str,
+        step_z_thresh=step_z_thresh,
+        upper_z_thresh=upper_z_thresh,
+        lower_z_thresh=lower_z_thresh,
+        raw_constraint=raw_constraint,
+        hdi=hdi,
+        pepsirf_binary=pepsirf_binary,
+        create_visualizations=False
     )
